@@ -21,10 +21,6 @@ app.get('/', function (req, res) {
 const pos = {x: 400, y: 200}
 var initMoveVal = 10
 
-const foundWally = (pos) => {
-  return pos.y >= 380 && pos.x >= 340 && pos.x <= 470
-}
-
 // define events for any new connection
 io.on('connection', function (socket) {
   // io.emit will emit event to everyone
@@ -45,11 +41,11 @@ io.on('connection', function (socket) {
         pos.x += moveVal
         break
     }
-    io.emit('key-receive', {pos, foundWally: foundWally(pos)})
+    io.emit('key-receive', {pos})
   })
 
   // emit initial pos (to one) and connections (to everyone) no. for new connection
-  socket.emit('initial-pos', {pos, foundWally: foundWally(pos)})
+  socket.emit('initial-pos', {pos})
   io.emit('connections', {clientsCount: io.engine.clientsCount})
 
   socket.on('disconnect', function () {

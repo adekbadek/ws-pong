@@ -8,14 +8,7 @@ html
       }
       #box{
         position: absolute;
-        background-image: url('img/wally.jpg');
-        background-attachment: fixed;
-        background-size: 1000px;
-        background-repeat: no-repeat;
-        border-radius: 50%;
-        background-position: 0 0;
-        border-width: 6px;
-        border-style: solid;
+        background: black;
         opacity: 0;
         transition: opacity 200ms;
       }
@@ -23,16 +16,9 @@ html
         font-size: 20px;
         float: right;
       }
-      #there{
-        font-weight: bold;
-        font-size: 150px;
-        color: #2000ff;
-        display: none;
-      }
   body
     #box
     #clients-count
-    #there RIGHT THERE
 
     script(src='/socket.io/socket.io.js')
     script(src='/js/script.js')

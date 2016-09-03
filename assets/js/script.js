@@ -4,7 +4,6 @@
 var socket = io()
 
 var clientsCountDiv = document.getElementById('clients-count')
-var thereDiv = document.getElementById('there')
 
 // init dimensions and position
 var box = document.getElementById('box')
@@ -14,13 +13,6 @@ box.style.width = box.style.height = side + 'px'
 var handleResponse = function (data) {
   box.style.top = data.pos.y + 'px'
   box.style.left = data.pos.x + 'px'
-  if (data.foundWally) {
-    box.style.borderColor = '#2000ff'
-    thereDiv.style.display = 'inline'
-  } else {
-    box.style.borderColor = 'transparent'
-    thereDiv.style.display = 'none'
-  }
 }
 
 // listen to socket events
