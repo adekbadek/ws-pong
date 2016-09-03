@@ -6,33 +6,35 @@ var socket = io()
 // The box
 var box = document.getElementById('box')
 // init dimensions and position
-box.style.width = box.style.height = '50px'
-box.style.top = (window.innerHeight / 2 - 25) + 'px'
-box.style.left = (window.innerWidth / 2 - 25) + 'px'
+var side = 200
+box.style.width = box.style.height = side + 'px'
+box.style.top = '35%'
+box.style.left = '40%'
 
 var move = {
   x: function (change) {
-    box.style.top = (parseInt(box.style.top) + change) + 'px'
+    box.style.top = (parseInt(box.style.top) + change) + '%'
   },
   y: function (change) {
-    box.style.left = (parseInt(box.style.left) + change) + 'px'
+    box.style.left = (parseInt(box.style.left) + change) + '%'
   }
 }
 
 // listen to socket event
+var moveVal = 1
 socket.on('key-receive', function (data) {
   switch (data) {
     case 'up':
-      move.x(-10)
+      move.x(-moveVal)
       break
     case 'down':
-      move.x(10)
+      move.x(moveVal)
       break
     case 'left':
-      move.y(-10)
+      move.y(-moveVal)
       break
     case 'right':
-      move.y(10)
+      move.y(moveVal)
       break
   }
 })
