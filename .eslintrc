@@ -2,7 +2,8 @@
   "extends": ["standard"],
   "rules": {
     "no-multiple-empty-lines": 1,
-    "padded-blocks": 1
+    "padded-blocks": 1,
+    "semi": 0
   },
   "env": {
     "browser": true,
