@@ -7,7 +7,7 @@ var animate = window.requestAnimationFrame ||
 
 var canvas = document.createElement('canvas');
 var width = 400;
-var height = 600;
+var height = 400;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
@@ -45,41 +45,22 @@ Paddle.prototype.move = function (x, y) {
 // Players
 // are just Paddles + updating
 
-function Player1 () {
-  this.paddle = new Paddle(175, 580, 50, 10);
+function Player (paddleX, paddleY, leftKeyCode, rightKeyCode) {
+  this.paddle = new Paddle(paddleX, paddleY, 50, 10);
+  this.leftKeyCode = leftKeyCode
+  this.rightKeyCode = rightKeyCode
 }
 
-function Player2 () {
-  this.paddle = new Paddle(175, 10, 50, 10);
-}
-
-Player1.prototype.render = function () {
+Player.prototype.render = function () {
   this.paddle.render();
 };
 
-Player2.prototype.render = function () {
-  this.paddle.render();
-};
-
-Player1.prototype.update = function () {
+Player.prototype.update = function () {
   for (var key in keysDown) {
     var value = Number(key);
-    if (value === 37) { // left arrow
+    if (value === this.leftKeyCode) { // left arrow
       this.paddle.move(-4, 0);
-    } else if (value === 39) { // right arrow
-      this.paddle.move(4, 0);
-    } else {
-      this.paddle.move(0, 0);
-    }
-  }
-};
-
-Player2.prototype.update = function () {
-  for (var key in keysDown) {
-    var value = Number(key);
-    if (value === 65) { // 'W' key
-      this.paddle.move(-4, 0);
-    } else if (value === 68) { // 'D' key
+    } else if (value === this.rightKeyCode) { // right arrow
       this.paddle.move(4, 0);
     } else {
       this.paddle.move(0, 0);
@@ -145,8 +126,6 @@ Ball.prototype.update = function (paddle1, paddle2) {
 
 // init
 
-var player1 = new Player1();
-var player2 = new Player2();
 var ball = new Ball(width / 2, height / 2);
 
 window.onload = function () {
@@ -159,6 +138,9 @@ var step = function () {
   render();
   animate(step);
 };
+
+var player1 = new Player(175, height - 20, 37, 39);
+var player2 = new Player(175, 10, 65, 68);
 
 var update = function () {
   player1.update();
