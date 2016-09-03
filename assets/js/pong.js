@@ -97,7 +97,7 @@ Ball.prototype.render = function () {
   context.fill();
 };
 
-Ball.prototype.update = function (paddle1, paddle2) {
+Ball.prototype.update = function (paddleLeft, paddleRigth) {
   this.x += this.x_speed;
   this.y += this.y_speed;
   var ballTop = this.y - this.radius;
@@ -113,60 +113,58 @@ Ball.prototype.update = function (paddle1, paddle2) {
     this.y_speed = -this.y_speed;
   }
 
-  if (this.x < 0 || this.x > height) { // a point was scored for player1
+  if (this.x < 0 || this.x > height) { // a point was scored for playerLeft
     this.x_speed = this.speed;
     this.y_speed = 0;
     this.x = width / 2;
     this.y = height / 2;
   }
 
-  // TODO: points ^ for player2
+  // TODO: points ^ for playerRight
 
   if (this.x < width / 2) {
     // the ball is on the left
     if (
-      balLeft < (paddle1.x + paddle1.width) &&
-      ballBottom < (paddle1.y + paddle1.height) + this.radius &&
-      ballTop > paddle1.y - this.radius
+      balLeft < (paddleLeft.x + paddleLeft.width) &&
+      ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius &&
+      ballTop > paddleLeft.y - this.radius
     ) {
-      // hit the player1's paddle
+      // hit the playerLeft's paddle
       this.x_speed = this.speed;
-      this.y_speed += (paddle1.y_speed / 2);
+      this.y_speed += (paddleLeft.y_speed / 2);
       this.x += this.x_speed;
     }
   } else {
     // the ball is on the right
     if (
-      ballBottom < (paddle2.y + paddle2.height) + this.radius &&
-      ballTop > paddle2.y - this.radius &&
-      ballRight > paddle2.x
+      ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius &&
+      ballTop > paddleRigth.y - this.radius &&
+      ballRight > paddleRigth.x
     ) {
-      // hit the player2's paddle
+      // hit the playerRight's paddle
       this.x_speed = -this.speed;
-      this.y_speed += (paddle2.y_speed / 2);
+      this.y_speed += (paddleRigth.y_speed / 2);
       this.x += this.x_speed;
     }
   }
 };
 
-// TODO: rename players 1, 2 to left, right
-
 // init
 var ball = new Ball(width / 2, height / 2, 3);
-var player1 = new Player(20, 87, 83);
-var player2 = new Player(width - 20, 38, 40);
+var playerLeft = new Player(20, 87, 83);
+var playerRight = new Player(width - 20, 38, 40);
 
 var update = function () {
-  player1.update();
-  player2.update();
-  ball.update(player1.paddle, player2.paddle);
+  playerLeft.update();
+  playerRight.update();
+  ball.update(playerLeft.paddle, playerRight.paddle);
 };
 
 var render = function () {
   context.fillStyle = '#000';
   context.fillRect(0, 0, width, height);
-  player1.render();
-  player2.render();
+  playerLeft.render();
+  playerRight.render();
   ball.render();
 };
 
