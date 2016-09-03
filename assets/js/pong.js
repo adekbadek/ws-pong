@@ -5,6 +5,17 @@ var animate = window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   function (callback) { window.setTimeout(callback, 1000 / 60) }
 
+window.onload = function () {
+  document.body.appendChild(canvas);
+  animate(step);
+};
+
+var step = function () {
+  update();
+  render();
+  animate(step);
+};
+
 var canvas = document.createElement('canvas');
 var width = 400;
 var height = 400;
@@ -33,20 +44,20 @@ Paddle.prototype.move = function (x, y) {
   this.y += y;
   this.x_speed = x;
   this.y_speed = y;
-  if (this.x < 0) { // all the way to the left
-    this.x = 0;
-    this.x_speed = 0;
-  } else if (this.x + this.width > width) { // all the way to the right
-    this.x = width - this.width;
-    this.x_speed = 0;
+  if (this.y < 0) { // all the way to the top
+    this.y = 0;
+    this.y_speed = 0;
+  } else if (this.y + this.height > height) { // all the way to the bottom
+    this.y = height - this.height;
+    this.y_speed = 0;
   }
 }
 
-// Players
-// are just Paddles + updating
+// Player
+// in just Paddle + updating
 
-function Player (paddleX, paddleY, leftKeyCode, rightKeyCode) {
-  this.paddle = new Paddle(paddleX, paddleY, 50, 10);
+function Player (paddleX, leftKeyCode, rightKeyCode) {
+  this.paddle = new Paddle(paddleX, height / 2 - 25, 10, 50);
   this.leftKeyCode = leftKeyCode
   this.rightKeyCode = rightKeyCode
 }
@@ -59,9 +70,9 @@ Player.prototype.update = function () {
   for (var key in keysDown) {
     var value = Number(key);
     if (value === this.leftKeyCode) { // left arrow
-      this.paddle.move(-4, 0);
+      this.paddle.move(0, -4);
     } else if (value === this.rightKeyCode) { // right arrow
-      this.paddle.move(4, 0);
+      this.paddle.move(0, 4);
     } else {
       this.paddle.move(0, 0);
     }
@@ -69,11 +80,13 @@ Player.prototype.update = function () {
 };
 
 // Ball
-function Ball (x, y) {
+
+function Ball (x, y, speed) {
   this.x = x;
   this.y = y;
-  this.x_speed = 0;
-  this.y_speed = 3; // initial speed
+  this.speed = speed
+  this.x_speed = speed;
+  this.y_speed = 0; // initial speed
   this.radius = 5;
 }
 
@@ -87,60 +100,61 @@ Ball.prototype.render = function () {
 Ball.prototype.update = function (paddle1, paddle2) {
   this.x += this.x_speed;
   this.y += this.y_speed;
-  var topX = this.x - 5;
-  var topY = this.y - 5;
-  var bottomX = this.x + 5;
-  var bottomY = this.y + 5;
+  var ballTop = this.y - this.radius;
+  var ballBottom = this.y + this.radius;
+  var balLeft = this.x - this.radius;
+  var ballRight = this.x + this.radius;
 
-  if (this.x - 5 < 0) { // hitting the left wall
-    this.x = 5;
-    this.x_speed = -this.x_speed;
-  } else if (this.x + 5 > width) { // hitting the right wall
-    this.x = width - 5;
-    this.x_speed = -this.x_speed;
+  if (this.y - this.radius < 0) { // hitting the top wall
+    this.y = this.radius;
+    this.y_speed = -this.y_speed;
+  } else if (this.y + this.radius > height) { // hitting the bottom wall
+    this.y = height - this.radius;
+    this.y_speed = -this.y_speed;
   }
 
-  if (this.y < 0 || this.y > height) { // a point was scored
-    this.x_speed = 0;
-    this.y_speed = 3;
+  if (this.x < 0 || this.x > height) { // a point was scored for player1
+    this.x_speed = this.speed;
+    this.y_speed = 0;
     this.x = width / 2;
     this.y = height / 2;
   }
 
-  if (topY > height / 2) {
-    if (topY < (paddle1.y + paddle1.height) && bottomY > paddle1.y && topX < (paddle1.x + paddle1.width) && bottomX > paddle1.x) {
+  // TODO: points ^ for player2
+
+  if (this.x < width / 2) {
+    // the ball is on the left
+    if (
+      balLeft < (paddle1.x + paddle1.width) &&
+      ballBottom < (paddle1.y + paddle1.height) + this.radius &&
+      ballTop > paddle1.y - this.radius
+    ) {
       // hit the player1's paddle
-      this.y_speed = -3;
-      this.x_speed += (paddle1.x_speed / 2);
-      this.y += this.y_speed;
+      this.x_speed = this.speed;
+      this.y_speed += (paddle1.y_speed / 2);
+      this.x += this.x_speed;
     }
   } else {
-    if (topY < (paddle2.y + paddle2.height) && bottomY > paddle2.y && topX < (paddle2.x + paddle2.width) && bottomX > paddle2.x) {
+    // the ball is on the right
+    if (
+      ballBottom < (paddle2.y + paddle2.height) + this.radius &&
+      ballTop > paddle2.y - this.radius &&
+      ballRight > paddle2.x
+    ) {
       // hit the player2's paddle
-      this.y_speed = 3;
-      this.x_speed += (paddle2.x_speed / 2);
-      this.y += this.y_speed;
+      this.x_speed = -this.speed;
+      this.y_speed += (paddle2.y_speed / 2);
+      this.x += this.x_speed;
     }
   }
 };
 
+// TODO: rename players 1, 2 to left, right
+
 // init
-
-var ball = new Ball(width / 2, height / 2);
-
-window.onload = function () {
-  document.body.appendChild(canvas);
-  animate(step);
-};
-
-var step = function () {
-  update();
-  render();
-  animate(step);
-};
-
-var player1 = new Player(175, height - 20, 37, 39);
-var player2 = new Player(175, 10, 65, 68);
+var ball = new Ball(width / 2, height / 2, 3);
+var player1 = new Player(20, 87, 83);
+var player2 = new Player(width - 20, 38, 40);
 
 var update = function () {
   player1.update();
