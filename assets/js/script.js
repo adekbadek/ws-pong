@@ -3,40 +3,36 @@
 // here we connect to self, but can connect to any href supporting WebSockets: var socket = io.connect('http://www.example.com')
 var socket = io()
 
-// The box
-var box = document.getElementById('box')
+var clientsCountDiv = document.getElementById('clients-count')
+var thereDiv = document.getElementById('there')
+
 // init dimensions and position
+var box = document.getElementById('box')
 var side = 200
 box.style.width = box.style.height = side + 'px'
-box.style.top = '35%'
-box.style.left = '40%'
 
-var move = {
-  x: function (change) {
-    box.style.top = (parseInt(box.style.top) + change) + '%'
-  },
-  y: function (change) {
-    box.style.left = (parseInt(box.style.left) + change) + '%'
+var handleResponse = function (data) {
+  box.style.top = data.pos.y + 'px'
+  box.style.left = data.pos.x + 'px'
+  if (data.foundWally) {
+    box.style.borderColor = '#2000ff'
+    thereDiv.style.display = 'inline'
+  } else {
+    box.style.borderColor = 'transparent'
+    thereDiv.style.display = 'none'
   }
 }
 
-// listen to socket event
-var moveVal = 1
+// listen to socket events
+socket.on('initial-pos', function (data) {
+  handleResponse(data)
+  box.style.opacity = 1
+})
 socket.on('key-receive', function (data) {
-  switch (data) {
-    case 'up':
-      move.x(-moveVal)
-      break
-    case 'down':
-      move.x(moveVal)
-      break
-    case 'left':
-      move.y(-moveVal)
-      break
-    case 'right':
-      move.y(moveVal)
-      break
-  }
+  handleResponse(data)
+})
+socket.on('connections', function (data) {
+  clientsCountDiv.innerHTML = data.clientsCount
 })
 
 // emit socket event

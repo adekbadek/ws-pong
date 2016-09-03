@@ -17,17 +17,43 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
+// primordial initial pos
+const pos = {x: 400, y: 200}
+var initMoveVal = 10
+
+const foundWally = (pos) => {
+  return pos.y >= 380 && pos.x >= 340 && pos.x <= 470
+}
+
 // define events for any new connection
 io.on('connection', function (socket) {
   // io.emit will emit event to everyone
   // socket.emit will emit event just to specific connection
   socket.on('key-send', function (data) {
-    io.emit('key-receive', data)
+    var moveVal = initMoveVal / io.engine.clientsCount
+    switch (data) {
+      case 'up':
+        pos.y -= moveVal
+        break
+      case 'down':
+        pos.y += moveVal
+        break
+      case 'left':
+        pos.x -= moveVal
+        break
+      case 'right':
+        pos.x += moveVal
+        break
+    }
+    io.emit('key-receive', {pos, foundWally: foundWally(pos)})
   })
 
-  // disconnect event
+  // emit initial pos (to one) and connections (to everyone) no. for new connection
+  socket.emit('initial-pos', {pos, foundWally: foundWally(pos)})
+  io.emit('connections', {clientsCount: io.engine.clientsCount})
+
   socket.on('disconnect', function () {
-    io.emit('news', { msg: 'Someone went home' })
+    io.emit('connections', {clientsCount: io.engine.clientsCount})
   })
 })
 
