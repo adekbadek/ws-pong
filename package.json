@@ -1,0 +1,22 @@
+{
+  "name": "websockets-pong",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Adam Borowski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.14.0",
+    "pug": "^2.0.0-beta6",
+    "socket.io": "^1.4.8"
+  },
+  "devDependencies": {
+    "eslint": "^3.4.0",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0"
+  }
+}
