@@ -173,11 +173,7 @@ socket.on('init-game', function (data) {
     playerRightColor
   )
 
-  if (isPlayerLeft) {
-    canvas.style.borderColor = playerLeftColor
-  } else {
-    canvas.style.borderColor = playerRightColor
-  }
+  canvas.style.borderColor = isPlayerLeft ? playerLeftColor : playerRightColor
 
   // frame of animation
   var step = function () {
