@@ -1,3 +1,4 @@
+/* global io */
 // https://robots.thoughtbot.com/pong-clone-in-javascript
 
 var animate = window.requestAnimationFrame ||
@@ -5,51 +6,34 @@ var animate = window.requestAnimationFrame ||
   window.mozRequestAnimationFrame ||
   function (callback) { window.setTimeout(callback, 1000 / 60) }
 
-window.onload = function () {
-  document.body.appendChild(canvas);
-  animate(step);
-};
-
-var step = function () {
-  update();
-  render();
-  animate(step);
-};
-
 var canvas = document.createElement('canvas');
 canvas.id = 'canvas'
 var height = 500;
-var width = height * 1.618;
+var width = 800;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
 
-var score = {
-  pLeft: 0,
-  pRight: 0
-}
+// Paddle. A player is a paddle.
 
-// Paddle
-
-function Paddle (x, y, width, height) {
+function Paddle (x, y, color) {
   this.x = x;
   this.y = y;
-  this.width = width;
-  this.height = height;
+  this.width = 10;
+  this.height = 50;
   this.x_speed = 0;
   this.y_speed = 0;
+  this.color = color;
 }
 
 Paddle.prototype.render = function () {
-  context.fillStyle = '#fff';
+  context.fillStyle = this.color;
   context.fillRect(this.x, this.y, this.width, this.height);
 };
 
-Paddle.prototype.move = function (x, y) {
-  this.x += x;
-  this.y += y;
-  this.x_speed = x;
-  this.y_speed = y;
+Paddle.prototype.move = function (y, speed) {
+  this.y = y;
+  this.y_speed = speed
   if (this.y < 0) { // all the way to the top
     this.y = 0;
     this.y_speed = 0;
@@ -59,40 +43,14 @@ Paddle.prototype.move = function (x, y) {
   }
 }
 
-// Player
-// in just Paddle + updating
-
-function Player (paddleX, leftKeyCode, rightKeyCode) {
-  this.paddle = new Paddle(paddleX, height / 2 - 25, 10, 50);
-  this.leftKeyCode = leftKeyCode
-  this.rightKeyCode = rightKeyCode
-}
-
-Player.prototype.render = function () {
-  this.paddle.render();
-};
-
-Player.prototype.update = function () {
-  for (var key in keysDown) {
-    var value = Number(key);
-    if (value === this.leftKeyCode) { // left arrow
-      this.paddle.move(0, -4);
-    } else if (value === this.rightKeyCode) { // right arrow
-      this.paddle.move(0, 4);
-    } else {
-      this.paddle.move(0, 0);
-    }
-  }
-};
-
 // Ball
 
-function Ball (x, y, speed) {
-  this.x = x;
-  this.y = y;
-  this.speed = speed
-  this.x_speed = speed;
-  this.y_speed = 0; // initial speed
+function Ball (config) {
+  this.speed = 3
+  this.x = config.x;
+  this.y = config.y;
+  this.x_speed = config.x_speed;
+  this.y_speed = config.y_speed;
   this.radius = 5;
 }
 
@@ -102,6 +60,13 @@ Ball.prototype.render = function () {
   context.fillStyle = '#fff';
   context.fill();
 };
+
+Ball.prototype.forceUpdate = function (ballPos) {
+  this.x = ballPos.x
+  this.y = ballPos.y
+  this.x_speed = ballPos.x_speed
+  this.y_speed = ballPos.y_speed
+}
 
 Ball.prototype.update = function (paddleLeft, paddleRigth) {
   this.x += this.x_speed;
@@ -121,11 +86,9 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
 
   if (this.x < 0 || this.x > width) { // a point was scored
     if (this.x < 0) {
-      console.log('playerRight scores')
-      score.pRight += 1
+      socket.emit('score', 'pRight')
     } else {
-      console.log('playerLeft scores')
-      score.pLeft += 1
+      socket.emit('score', 'pLeft')
     }
     this.x_speed = (this.x < 0 ? -this.speed : this.speed) * 0.6; // slomo
     this.y_speed = 0;
@@ -150,40 +113,80 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
       this.x += this.x_speed;
     }
   }
-};
-
-// init
-var ball = new Ball(width / 2, height / 2, 3);
-var playerLeft = new Player(20, 87, 83);
-var playerRight = new Player(width - 20, 38, 40);
-
-var update = function () {
-  playerLeft.update();
-  playerRight.update();
-  ball.update(playerLeft.paddle, playerRight.paddle);
-};
-
-var render = function () {
-  context.fillStyle = '#000';
-  context.fillRect(0, 0, width, height);
-  context.fillStyle = '#fff';
-  context.font = '20px sans-serif';
-  context.fillText(score.pLeft, width / 2 - 20, 30);
-  context.fillText(':', width / 2, 30);
-  context.fillText(score.pRight, width / 2 + 15, 30);
-  playerLeft.render();
-  playerRight.render();
-  ball.render();
+  // update ball pos info on backend to use for new connections and forced updates
+  socket.emit('ball-pos', {
+    x: this.x,
+    y: this.y,
+    x_speed: this.x_speed,
+    y_speed: this.y_speed
+  })
 };
 
 // Controls
 
-var keysDown = {};
-
-window.addEventListener('keydown', function (event) {
-  keysDown[event.keyCode] = true;
+window.addEventListener('keydown', function (e) {
+  if (e.keyCode === 38) { socket.emit('key-send', isPlayerLeft ? 'left-up' : 'right-up') }
+  if (e.keyCode === 40) { socket.emit('key-send', isPlayerLeft ? 'left-down' : 'right-down') }
 });
 
-window.addEventListener('keyup', function (event) {
-  delete keysDown[event.keyCode];
-});
+var ball
+var playerLeft
+var playerRight
+var isPlayerLeft
+var score
+
+// Socket
+var socket = io()
+
+// every second, server will update the position so all connections are on the same page
+socket.on('set-ball-pos', function (data) {
+  ball.forceUpdate(data.ballPos)
+})
+
+socket.on('update-players-positions', function (data) {
+  playerLeft.move(data.playerLeft, data.playerLeftSpeed)
+  playerRight.move(data.playerRight, data.playerRightSpeed)
+})
+
+socket.on('score', function (data) {
+  score = data.score
+})
+
+socket.on('init-game', function (data) {
+  // initial score and player identification
+  isPlayerLeft = data.nextConnectedIsLeft
+  score = data.score
+
+  ball = new Ball(data.ballPos);
+  playerLeft = new Paddle(
+    20,
+    data.playersPos.playerLeft,
+    (isPlayerLeft ? '#fff' : '#aaa')
+  )
+  playerRight = new Paddle(
+    width - 20,
+    data.playersPos.playerRight,
+    (isPlayerLeft ? '#aaa' : '#fff')
+  )
+
+  // frame of animation
+  var step = function () {
+    ball.update(playerLeft, playerRight);
+
+    context.fillStyle = '#000';
+    context.fillRect(0, 0, width, height);
+    context.fillStyle = '#fff';
+    context.font = '20px sans-serif';
+    context.fillText(score.pLeft, width / 2 - 20, 30);
+    context.fillText(':', width / 2 + 5, 30);
+    context.fillText(score.pRight, width / 2 + 15, 30);
+    playerLeft.render();
+    playerRight.render();
+    ball.render();
+
+    animate(step);
+  };
+
+  document.body.appendChild(canvas);
+  animate(step);
+})
