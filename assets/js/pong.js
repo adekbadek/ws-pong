@@ -57,7 +57,7 @@ function Ball (config) {
 Ball.prototype.render = function () {
   context.beginPath();
   context.arc(this.x, this.y, this.radius, 2 * Math.PI, false);
-  context.fillStyle = '#fff';
+  context.fillStyle = secColor;
   context.fill();
 };
 
@@ -152,6 +152,10 @@ socket.on('score', function (data) {
   score = data.score
 })
 
+var playerLeftColor = '#52ff00'
+var playerRightColor = '#3391ff'
+var secColor = '#fff'
+
 socket.on('init-game', function (data) {
   // initial score and player identification
   isPlayerLeft = data.nextConnectedIsLeft
@@ -161,13 +165,19 @@ socket.on('init-game', function (data) {
   playerLeft = new Paddle(
     20,
     data.playersPos.playerLeft,
-    (isPlayerLeft ? '#fff' : '#aaa')
+    playerLeftColor
   )
   playerRight = new Paddle(
     width - 20,
     data.playersPos.playerRight,
-    (isPlayerLeft ? '#aaa' : '#fff')
+    playerRightColor
   )
+
+  if (isPlayerLeft) {
+    canvas.style.borderColor = playerLeftColor
+  } else {
+    canvas.style.borderColor = playerRightColor
+  }
 
   // frame of animation
   var step = function () {
@@ -175,10 +185,12 @@ socket.on('init-game', function (data) {
 
     context.fillStyle = '#000';
     context.fillRect(0, 0, width, height);
-    context.fillStyle = '#fff';
     context.font = '20px sans-serif';
-    context.fillText(score.pLeft, width / 2 - 20, 30);
-    context.fillText(':', width / 2 + 5, 30);
+    context.fillStyle = playerLeftColor;
+    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 5, 30);
+    context.fillStyle = secColor;
+    context.fillText(':', width / 2, 30);
+    context.fillStyle = playerRightColor;
     context.fillText(score.pRight, width / 2 + 15, 30);
     playerLeft.render();
     playerRight.render();
