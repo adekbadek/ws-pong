@@ -3,7 +3,6 @@
   "rules": {
     "no-multiple-empty-lines": 1,
     "padded-blocks": 1,
-    "semi": 0,
     "camelcase": 0
   },
   "env": {
