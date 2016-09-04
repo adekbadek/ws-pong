@@ -4,20 +4,23 @@ html
     title pong
     style.
       body{
+        margin: 10px;
         font-family: sans-serif;
+        overflow: hidden;
       }
-      #box{
+      #canvas{
         position: absolute;
-        background: black;
-        opacity: 0;
-        transition: opacity 200ms;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: auto;
       }
       #clients-count{
         font-size: 20px;
         float: right;
       }
   body
-    #box
     #clients-count
 
     script(src='/socket.io/socket.io.js')

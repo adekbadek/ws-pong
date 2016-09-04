@@ -17,11 +17,17 @@ var step = function () {
 };
 
 var canvas = document.createElement('canvas');
-var width = 400;
-var height = 400;
+canvas.id = 'canvas'
+var height = 500;
+var width = height * 1.618;
 canvas.width = width;
 canvas.height = height;
 var context = canvas.getContext('2d');
+
+var score = {
+  pLeft: 0,
+  pRight: 0
+}
 
 // Paddle
 
@@ -113,22 +119,23 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
     this.y_speed = -this.y_speed;
   }
 
-  if (this.x < 0 || this.x > height) { // a point was scored for playerLeft
-    this.x_speed = this.speed;
+  if (this.x < 0 || this.x > width) { // a point was scored
+    if (this.x < 0) {
+      console.log('playerRight scores')
+      score.pRight += 1
+    } else {
+      console.log('playerLeft scores')
+      score.pLeft += 1
+    }
+    this.x_speed = (this.x < 0 ? -this.speed : this.speed) * 0.6; // slomo
     this.y_speed = 0;
     this.x = width / 2;
     this.y = height / 2;
   }
 
-  // TODO: points ^ for playerRight
-
   if (this.x < width / 2) {
     // the ball is on the left
-    if (
-      balLeft < (paddleLeft.x + paddleLeft.width) &&
-      ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius &&
-      ballTop > paddleLeft.y - this.radius
-    ) {
+    if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius && ballTop > paddleLeft.y - this.radius) {
       // hit the playerLeft's paddle
       this.x_speed = this.speed;
       this.y_speed += (paddleLeft.y_speed / 2);
@@ -136,11 +143,7 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
     }
   } else {
     // the ball is on the right
-    if (
-      ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius &&
-      ballTop > paddleRigth.y - this.radius &&
-      ballRight > paddleRigth.x
-    ) {
+    if (ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius && ballTop > paddleRigth.y - this.radius && ballRight > paddleRigth.x) {
       // hit the playerRight's paddle
       this.x_speed = -this.speed;
       this.y_speed += (paddleRigth.y_speed / 2);
@@ -163,6 +166,11 @@ var update = function () {
 var render = function () {
   context.fillStyle = '#000';
   context.fillRect(0, 0, width, height);
+  context.fillStyle = '#fff';
+  context.font = '20px sans-serif';
+  context.fillText(score.pLeft, width / 2 - 20, 30);
+  context.fillText(':', width / 2, 30);
+  context.fillText(score.pRight, width / 2 + 15, 30);
   playerLeft.render();
   playerRight.render();
   ball.render();
