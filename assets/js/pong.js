@@ -31,6 +31,9 @@ Paddle.prototype.render = function () {
   img.src = this.imgSrc
   context.fillStyle = context.createPattern(img, 'repeat')
   context.fillRect(this.x, this.y, this.width, this.height)
+  context.strokeStyle = secColor
+  context.lineWidth = 3
+  context.strokeRect(this.x, this.y, this.width, this.height)
 }
 
 Paddle.prototype.move = function (y, speed) {
@@ -190,17 +193,17 @@ socket.on('init-game', function (data) {
     context.fillRect(0, 0, width, height)
     context.font = '16px sans-serif'
     context.fillStyle = secColor
-    context.fillText('score', width / 2 - context.measureText('score').width / 2, 10)
-    context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height)
+    context.fillText('score', width / 2 - context.measureText('score').width / 2, 15)
+    context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height - 6)
     context.font = '20px sans-serif'
     // scores
-    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 33)
-    context.fillText('-', width / 2 - 2, 33)
-    context.fillText(score.pRight, width / 2 + 6, 33)
+    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 38)
+    context.fillText('-', width / 2 - 2, 38)
+    context.fillText(score.pRight, width / 2 + 6, 38)
     // voters
-    context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 20)
-    context.fillText(':', width / 2 - 2, height - 20)
-    context.fillText(voters.pRight, width / 2 + 6, height - 20)
+    context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 23)
+    context.fillText(':', width / 2 - 2, height - 23)
+    context.fillText(voters.pRight, width / 2 + 6, height - 23)
     playerLeft.render()
     playerRight.render()
     ball.render()

@@ -19,7 +19,7 @@ app.get('/', function (req, res) {
 
 // primordial initial pos / the state
 let nextConnectedIsLeft = true
-let playersPos = {playerLeft: 225, playerLeftSpeed: 0, playerRight: 225, playerRightSpeed: 0}
+let playersPos = {playerLeft: 212, playerLeftSpeed: 0, playerRight: 212, playerRightSpeed: 0}
 let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}
