@@ -130,6 +130,12 @@
 
   // Controls
 
+  var introDiv = document.getElementById('intro')
+  var introNum = document.getElementById('intro-num')
+  var introNumOther = document.getElementById('intro-num-other')
+  var introDir = document.getElementById('intro-dir')
+  var closeBtn = document.getElementById('btn-close')
+
   window.addEventListener('keydown', function (e) {
     if (e.keyCode === 38) { socket.emit('key-send', isPlayerLeft ? 'left-up' : 'right-up') }
     if (e.keyCode === 40) { socket.emit('key-send', isPlayerLeft ? 'left-down' : 'right-down') }
@@ -141,11 +147,6 @@
   var isPlayerLeft
   var score
   var voters
-
-  // intro
-  var introNum = document.getElementById('intro-num')
-  var introNumOther = document.getElementById('intro-num-other')
-  var introDir = document.getElementById('intro-dir')
 
   // Socket
   var socket = io()
@@ -226,8 +227,6 @@
     animate(step)
   })
 
-  var closeBtn = document.getElementById('btn-close')
-  var introDiv = document.getElementById('intro')
   closeBtn.onclick = function () {
     introDiv.remove()
   }
