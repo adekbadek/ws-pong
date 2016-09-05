@@ -23,6 +23,8 @@ let playersPos = {playerLeft: 225, playerLeftSpeed: 0, playerRight: 225, playerR
 let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 
+let paddleSpeed = 5
+
 // define events for any new connection
 io.on('connection', function (socket) {
   // io.emit will emit event to everyone
@@ -31,17 +33,17 @@ io.on('connection', function (socket) {
   // handle voting on direction
   socket.on('key-send', function (data) {
     if (data === 'right-up') {
-      playersPos.playerRight -= 4
-      playersPos.playerRightSpeed = -4
+      playersPos.playerRight -= paddleSpeed
+      playersPos.playerRightSpeed = -paddleSpeed
     } else if (data === 'right-down') {
-      playersPos.playerRight += 4
-      playersPos.playerRightSpeed = 4
+      playersPos.playerRight += paddleSpeed
+      playersPos.playerRightSpeed = paddleSpeed
     } else if (data === 'left-up') {
-      playersPos.playerLeft -= 4
-      playersPos.playerLeftSpeed = -4
+      playersPos.playerLeft -= paddleSpeed
+      playersPos.playerLeftSpeed = -paddleSpeed
     } else if (data === 'left-down') {
-      playersPos.playerLeft += 4
-      playersPos.playerLeftSpeed = 4
+      playersPos.playerLeft += paddleSpeed
+      playersPos.playerLeftSpeed = paddleSpeed
     }
     io.emit('update-players-positions', playersPos)
   })

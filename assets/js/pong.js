@@ -100,7 +100,7 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
 
   if (this.x < width / 2) {
     // the ball is on the left
-    if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius && ballTop > paddleLeft.y - this.radius) {
+    if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius * 2 && ballTop > paddleLeft.y - this.radius * 2) {
       // hit the playerLeft's paddle
       this.x_speed = this.speed
       this.y_speed += (paddleLeft.y_speed / 2)
@@ -108,7 +108,7 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
     }
   } else {
     // the ball is on the right
-    if (ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius && ballTop > paddleRigth.y - this.radius && ballRight > paddleRigth.x) {
+    if (ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius * 2 && ballTop > paddleRigth.y - this.radius * 2 && ballRight > paddleRigth.x) {
       // hit the playerRight's paddle
       this.x_speed = -this.speed
       this.y_speed += (paddleRigth.y_speed / 2)
