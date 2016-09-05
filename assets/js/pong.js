@@ -33,7 +33,7 @@
     context.fillStyle = context.createPattern(img, 'repeat')
     context.fillRect(this.x, this.y, this.width, this.height)
     context.strokeStyle = secColor
-    context.lineWidth = 3
+    context.lineWidth = 2
     context.strokeRect(this.x, this.y, this.width, this.height)
   }
 
@@ -201,21 +201,21 @@
     var step = function () {
       ball.update(playerLeft, playerRight)
 
-      context.fillStyle = '#000'
+      context.fillStyle = '#00f'
       context.fillRect(0, 0, width, height)
       context.font = '16px sans-serif'
       context.fillStyle = secColor
-      context.fillText('score', width / 2 - context.measureText('score').width / 2, 15)
-      context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height - 6)
+      context.fillText('score', width / 2 - context.measureText('score').width / 2, 18)
+      context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height - 10)
       context.font = '20px sans-serif'
       // scores
-      context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 38)
-      context.fillText('-', width / 2 - 2, 38)
-      context.fillText(score.pRight, width / 2 + 6, 38)
+      context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 40)
+      context.fillText('-', width / 2 - 2, 40)
+      context.fillText(score.pRight, width / 2 + 6, 40)
       // voters
-      context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 23)
-      context.fillText(':', width / 2 - 2, height - 23)
-      context.fillText(voters.pRight, width / 2 + 6, height - 23)
+      context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 30)
+      context.fillText(':', width / 2 - 2, height - 30)
+      context.fillText(voters.pRight, width / 2 + 6, height - 30)
       playerLeft.render()
       playerRight.render()
       ball.render()
@@ -230,5 +230,4 @@
   closeBtn.onclick = function () {
     introDiv.remove()
   }
-
 })()

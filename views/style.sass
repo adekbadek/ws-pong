@@ -1,8 +1,11 @@
+$main: #00f
+
 body
   margin: 10px
   font-family: sans-serif
   overflow: hidden
   opacity: 0
+  color: $main
 
 button
   cursor: pointer
@@ -17,7 +20,8 @@ button
   left: 0
   right: 0
   margin: auto
-  outline: 3px solid white
+  outline: 3px solid blue
+  border: 2px solid white
 
 #clients-count
   font-size: 20px
@@ -33,6 +37,8 @@ button
   height: 200px
   z-index: 1
   background: white
+  outline: 3px solid white
+  border: 3px solid
   width: 320px
   padding: 10px 15px
   font-size: 23px
@@ -46,8 +52,9 @@ button
   margin: auto
   background: none
   outline: none
-  border: 2px solid black
+  border: 3px solid $main
   font-size: inherit
+  color: inherit
   &:hover
-    background: black
+    background: $main
     color: white
