@@ -130,15 +130,56 @@
 
   // Controls
 
+  // intro
   var introDiv = document.getElementById('intro')
   var introNum = document.getElementById('intro-num')
   var introNumOther = document.getElementById('intro-num-other')
   var introDir = document.getElementById('intro-dir')
   var closeBtn = document.getElementById('btn-close')
 
+  // /////////////////////////////////////////////////////////////////////////////////////////////
+  // testing
+
+  var getRandomInt = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
+  var testing = document.getElementById('testing')
+  introDiv.remove()
+
+  var sendUp = function () {
+    // testing
+    testing.innerHTML = isPlayerLeft ? '↖' : '↗'
+    setTimeout(function () {
+      testing.innerHTML = ''
+    }, 300)
+    socket.emit('key-send', isPlayerLeft ? 'left-up' : 'right-up')
+  }
+  var sendDown = function () {
+    // testing
+    testing.innerHTML = isPlayerLeft ? '↙' : '↘'
+    setTimeout(function () {
+      testing.innerHTML = ''
+    }, 300)
+    socket.emit('key-send', isPlayerLeft ? 'left-down' : 'right-down')
+  }
+
+  var interv = getRandomInt(300, 1000)
+  setInterval(function () {
+    var myY = isPlayerLeft ? playerLeft.y : playerRight.y
+    if (ball.y > myY) {
+      Math.random() > 0.99 ? sendUp() : sendDown()
+    } else if (ball.y < myY) {
+      Math.random() > 0.01 ? sendUp() : sendDown()
+    } else {
+      Math.random() > 0.5 ? sendUp() : sendDown()
+    }
+    interv = getRandomInt(300, 1000)
+  }, interv)
+
   window.addEventListener('keydown', function (e) {
-    if (e.keyCode === 38) { socket.emit('key-send', isPlayerLeft ? 'left-up' : 'right-up') }
-    if (e.keyCode === 40) { socket.emit('key-send', isPlayerLeft ? 'left-down' : 'right-down') }
+    if (e.keyCode === 38) { sendUp() }
+    if (e.keyCode === 40) { sendDown() }
   })
 
   var ball
