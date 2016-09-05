@@ -19,8 +19,8 @@ var context = canvas.getContext('2d')
 function Paddle (x, y, color) {
   this.x = x
   this.y = y
-  this.width = 10
-  this.height = 50
+  this.width = 20
+  this.height = 80
   this.x_speed = 0
   this.y_speed = 0
   this.color = color
