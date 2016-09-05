@@ -4,7 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "style": "sass views/style.sass | postcss --use autoprefixer -o assets/css/style.css",
+    "watch": "npm-watch",
+    "postinstall": "npm run style"
+  },
+  "watch": {
+    "style": "views/style.sass"
   },
   "author": "Adam Borowski",
   "license": "ISC",
@@ -14,9 +19,13 @@
     "socket.io": "^1.4.8"
   },
   "devDependencies": {
+    "autoprefixer": "^6.4.1",
     "eslint": "^3.4.0",
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "npm-watch": "^0.1.6",
+    "postcss": "^5.1.2",
+    "postcss-cli": "^2.6.0"
   }
 }
