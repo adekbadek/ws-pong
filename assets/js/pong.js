@@ -16,18 +16,20 @@ var context = canvas.getContext('2d')
 
 // Paddle. A player is a paddle.
 
-function Paddle (x, y, color) {
+function Paddle (x, y, imgSrc) {
   this.x = x
   this.y = y
   this.width = 20
   this.height = 80
   this.x_speed = 0
   this.y_speed = 0
-  this.color = color
+  this.imgSrc = imgSrc
 }
 
 Paddle.prototype.render = function () {
-  context.fillStyle = this.color
+  var img = document.createElement('img')
+  img.src = this.imgSrc
+  context.fillStyle = context.createPattern(img, 'repeat')
   context.fillRect(this.x, this.y, this.width, this.height)
 }
 
@@ -152,9 +154,9 @@ socket.on('score', function (data) {
   score = data.score
 })
 
-var playerLeftColor = '#52ff00'
-var playerRightColor = '#3391ff'
 var secColor = '#fff'
+var playerLeftImg = 'img/stripe.jpg'
+var playerRightImg = 'img/dots.jpg'
 
 socket.on('init-game', function (data) {
   // initial score and player identification
@@ -165,15 +167,15 @@ socket.on('init-game', function (data) {
   playerLeft = new Paddle(
     20,
     data.playersPos.playerLeft,
-    playerLeftColor
+    playerLeftImg
   )
   playerRight = new Paddle(
-    width - 20,
+    width - 40,
     data.playersPos.playerRight,
-    playerRightColor
+    playerRightImg
   )
 
-  canvas.style.borderColor = isPlayerLeft ? playerLeftColor : playerRightColor
+  document.body.style.backgroundImage = 'url("' + (isPlayerLeft ? playerLeftImg : playerRightImg) + '")'
 
   // frame of animation
   var step = function () {
@@ -182,12 +184,10 @@ socket.on('init-game', function (data) {
     context.fillStyle = '#000'
     context.fillRect(0, 0, width, height)
     context.font = '20px sans-serif'
-    context.fillStyle = playerLeftColor
-    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 5, 30)
     context.fillStyle = secColor
+    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 3, 30)
     context.fillText(':', width / 2, 30)
-    context.fillStyle = playerRightColor
-    context.fillText(score.pRight, width / 2 + 15, 30)
+    context.fillText(score.pRight, width / 2 + 10, 30)
     playerLeft.render()
     playerRight.render()
     ball.render()
