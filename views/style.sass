@@ -2,6 +2,13 @@ body
   margin: 10px
   font-family: sans-serif
   overflow: hidden
+  opacity: 0
+
+button
+  cursor: pointer
+
+.bold
+  font-weight: bold
 
 #canvas
   position: absolute
@@ -17,10 +24,6 @@ body
   float: right
 
 #intro
-  background: white
-  transform: rotateX(230deg)
-  width: 320px
-  padding: 10px 15px
   margin: auto
   position: absolute
   top: 0
@@ -29,3 +32,22 @@ body
   bottom: 0
   height: 200px
   z-index: 1
+  background: white
+  width: 320px
+  padding: 10px 15px
+  font-size: 23px
+
+#btn-close
+  position: absolute
+  bottom: 10px
+  left: 0
+  right: 0
+  width: 80px
+  margin: auto
+  background: none
+  outline: none
+  border: 2px solid black
+  font-size: inherit
+  &:hover
+    background: black
+    color: white

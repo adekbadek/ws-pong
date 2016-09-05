@@ -142,6 +142,11 @@
   var score
   var voters
 
+  // intro
+  var introNum = document.getElementById('intro-num')
+  var introNumOther = document.getElementById('intro-num-other')
+  var introDir = document.getElementById('intro-dir')
+
   // Socket
   var socket = io()
 
@@ -161,6 +166,8 @@
 
   socket.on('connections', function (data) {
     voters = data.voters
+    introNum.innerHTML = ' ' + (data.voters[isPlayerLeft ? 'pLeft' : 'pRight'] - 1)
+    introNumOther.innerHTML = ' ' + data.voters[isPlayerLeft ? 'pRight' : 'pLeft']
   })
 
   var secColor = '#fff'
@@ -171,6 +178,8 @@
     // initial score and player identification
     isPlayerLeft = data.thisConnectedIsLeft
     score = data.score
+
+    introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
 
     ball = new Ball(data.ballPos)
     playerLeft = new Paddle(
@@ -185,6 +194,7 @@
     )
 
     document.body.style.backgroundImage = 'url("' + (isPlayerLeft ? playerLeftImg : playerRightImg) + '")'
+    document.body.style.opacity = 1
 
     // frame of animation
     var step = function () {
@@ -215,4 +225,11 @@
     document.body.appendChild(canvas)
     animate(step)
   })
+
+  var closeBtn = document.getElementById('btn-close')
+  var introDiv = document.getElementById('intro')
+  closeBtn.onclick = function () {
+    introDiv.remove()
+  }
+
 })()

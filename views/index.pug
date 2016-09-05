@@ -6,9 +6,18 @@ html
   body
 
     #intro
-      | you, along with X other people, control this paddle.
+      | You and
+      span#intro-num
+      |  other people, control the
+      span.bold#intro-dir
+      |  paddle.
       br
-      | Y people currently control the it other paddle
+      span#intro-num-other
+      |  people currently control the other paddle.
+      br
+      | Vote with
+      span.bold  arrow keys.
+      button#btn-close close
 
     script(src='https://cdn.socket.io/socket.io-1.4.5.js')
     script(src='/js/pong.js')
