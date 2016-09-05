@@ -22,6 +22,7 @@ let nextConnectedIsLeft = true
 let playersPos = {playerLeft: 225, playerLeftSpeed: 0, playerRight: 225, playerRightSpeed: 0}
 let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
+let voters = {pLeft: 0, pRight: 0}
 
 let paddleSpeed = 5
 
@@ -62,13 +63,19 @@ io.on('connection', function (socket) {
     io.emit('set-ball-pos', {ballPos})
   }, 1000)
 
-  socket.emit('init-game', {playersPos, ballPos, nextConnectedIsLeft, score})
-  nextConnectedIsLeft = !nextConnectedIsLeft
+  var thisConnectedIsLeft = nextConnectedIsLeft
 
-  io.emit('connections', {clientsCount: io.engine.clientsCount})
+  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, score})
+
+  thisConnectedIsLeft ? voters.pLeft += 1 : voters.pRight += 1
+
+  io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
   socket.on('disconnect', function () {
-    io.emit('connections', {clientsCount: io.engine.clientsCount})
+    thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
+    io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
   })
+
+  nextConnectedIsLeft = !nextConnectedIsLeft
 })
 
 server.listen(_PORT_, function () {

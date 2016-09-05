@@ -136,6 +136,7 @@ var playerLeft
 var playerRight
 var isPlayerLeft
 var score
+var voters
 
 // Socket
 var socket = io()
@@ -154,13 +155,17 @@ socket.on('score', function (data) {
   score = data.score
 })
 
+socket.on('connections', function (data) {
+  voters = data.voters
+})
+
 var secColor = '#fff'
 var playerLeftImg = 'img/stripe.jpg'
 var playerRightImg = 'img/dots.jpg'
 
 socket.on('init-game', function (data) {
   // initial score and player identification
-  isPlayerLeft = data.nextConnectedIsLeft
+  isPlayerLeft = data.thisConnectedIsLeft
   score = data.score
 
   ball = new Ball(data.ballPos)
@@ -183,11 +188,19 @@ socket.on('init-game', function (data) {
 
     context.fillStyle = '#000'
     context.fillRect(0, 0, width, height)
-    context.font = '20px sans-serif'
+    context.font = '16px sans-serif'
     context.fillStyle = secColor
-    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 3, 30)
-    context.fillText(':', width / 2, 30)
-    context.fillText(score.pRight, width / 2 + 10, 30)
+    context.fillText('score', width / 2 - context.measureText('score').width / 2, 10)
+    context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height)
+    context.font = '20px sans-serif'
+    // scores
+    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 33)
+    context.fillText('-', width / 2 - 2, 33)
+    context.fillText(score.pRight, width / 2 + 6, 33)
+    // voters
+    context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 20)
+    context.fillText(':', width / 2 - 2, height - 20)
+    context.fillText(voters.pRight, width / 2 + 6, height - 20)
     playerLeft.render()
     playerRight.render()
     ball.render()
