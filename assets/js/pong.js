@@ -52,7 +52,7 @@
   // Ball
 
   function Ball (config) {
-    this.speed = 3
+    this.speed = 2
     this.x = config.x
     this.y = config.y
     this.x_speed = config.x_speed
