@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "style": "sass views/style.sass | postcss --use autoprefixer -o assets/css/style.css",
     "watch": "npm-watch",
-    "postinstall": "npm run style"
+    "build": "npm run style"
   },
   "watch": {
     "style": "views/style.sass"
