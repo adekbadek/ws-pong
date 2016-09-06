@@ -120,12 +120,13 @@
       }
     }
     // update ball pos info on backend to use for new connections and forced updates
-    socket.emit('ball-pos', {
+    socket.emit('ball-pos', {ballPos: {
       x: this.x,
       y: this.y,
       x_speed: this.x_speed,
       y_speed: this.y_speed
-    })
+    },
+    id})
   }
 
   // Controls
@@ -147,13 +148,14 @@
   var isPlayerLeft
   var score
   var voters
+  var id
 
   // Socket
   var socket = io()
 
   // every second, server will update the position so all connections are on the same page
   socket.on('set-ball-pos', function (data) {
-    ball.forceUpdate(data.ballPos)
+    if (data.officialPositionBearer !== id) { ball.forceUpdate(data.ballPos) }
   })
 
   socket.on('update-players-positions', function (data) {
@@ -171,6 +173,10 @@
     introNumOther.innerHTML = ' ' + data.voters[isPlayerLeft ? 'pRight' : 'pLeft']
   })
 
+  // NOTE when the browser window is not visible, JS does not execute, so game stalls
+  window.onblur = function () { socket.emit('blur', {id}) }
+  window.onfocus = function () { socket.emit('focus', {id}) }
+
   var secColor = '#fff'
   var playerLeftImg = 'img/stripe.jpg'
   var playerRightImg = 'img/dots.jpg'
@@ -179,6 +185,8 @@
     // initial score and player identification
     isPlayerLeft = data.thisConnectedIsLeft
     score = data.score
+
+    id = data.id
 
     introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
 
