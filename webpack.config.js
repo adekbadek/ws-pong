@@ -1,8 +1,7 @@
-var webpack = require('webpack')
-var path = require('path')
+const webpack = require('webpack')
 
 module.exports = {
-  entry: './js/main.js',
+  entry: './front/js/main.js',
   output: {
     filename: 'assets/js/bundle.js'
   },
@@ -19,5 +18,12 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {
+        warnings: false
+      }
+    })
+  ]
 }

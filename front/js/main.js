@@ -1,4 +1,3 @@
-/* global io */
 // https://robots.thoughtbot.com/pong-clone-in-javascript
 
 var animate = window.requestAnimationFrame ||
@@ -150,6 +149,7 @@ var voters
 var id
 
 // Socket
+const io = require('socket.io-client')
 var socket = io()
 
 // every second, server will update the position so all connections are on the same page

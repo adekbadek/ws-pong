@@ -9,7 +9,7 @@ const io = require('socket.io')(server)
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
 
-app.set('views', './views')
+app.set('views', './front')
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'assets')))
 

@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build": "webpack -p --config webpack.config.js",
-    "style": "sass views/style.sass | postcss --use autoprefixer -o assets/css/style.css",
-    "watch": "npm-watch"
+    "js": "webpack -p --config webpack.config.js",
+    "style": "sass front/style.sass --style compressed | postcss --use autoprefixer -o assets/css/style.css",
+    "watch": "npm-watch",
+    "build": "npm run js && npm run style"
   },
   "watch": {
-    "style": "views/style.sass"
+    "js": "front/js/main.js",
+    "style": "front/style.sass"
   },
   "author": "Adam Borowski",
   "license": "ISC",
