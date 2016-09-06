@@ -6,8 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "style": "sass views/style.sass | postcss --use autoprefixer -o assets/css/style.css",
-    "watch": "npm-watch",
-    "build": "npm run style"
+    "watch": "npm-watch"
   },
   "watch": {
     "style": "views/style.sass"
