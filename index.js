@@ -11,7 +11,7 @@ app.set('port', _PORT_)
 
 app.set('views', './front')
 app.set('view engine', 'pug')
-app.use(express.static(path.join(__dirname, 'assets')))
+app.use(express.static(path.join(__dirname, 'public')))
 
 app.get('/', function (req, res) {
   res.render('index')

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node index.js",
     "js": "webpack -p --config webpack.config.js",
-    "style": "sass front/style.sass --style compressed | postcss --use autoprefixer -o assets/css/style.css",
+    "style": "sass front/style.sass --style compressed | postcss --use autoprefixer -o public/style.css",
     "watch": "npm-watch",
     "build": "npm run js && npm run style"
   },

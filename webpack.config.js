@@ -3,7 +3,7 @@ const webpack = require('webpack')
 module.exports = {
   entry: './front/js/main.js',
   output: {
-    filename: 'assets/js/bundle.js'
+    filename: 'public/bundle.js'
   },
   resolve: {
     extensions: ['', '.js']
