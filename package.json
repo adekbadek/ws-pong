@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "build": "webpack -p --config webpack.config.js",
     "style": "sass views/style.sass | postcss --use autoprefixer -o assets/css/style.css",
     "watch": "npm-watch"
   },
@@ -20,12 +21,16 @@
   },
   "devDependencies": {
     "autoprefixer": "^6.4.1",
+    "babel-core": "^6.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-preset-es2015": "^6.14.0",
     "eslint": "^3.4.0",
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^2.0.1",
     "eslint-plugin-standard": "^2.0.0",
     "npm-watch": "^0.1.6",
     "postcss": "^5.1.2",
-    "postcss-cli": "^2.6.0"
+    "postcss-cli": "^2.6.0",
+    "webpack": "^1.13.2"
   }
 }
