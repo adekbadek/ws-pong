@@ -24,7 +24,7 @@ let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}
 
-let paddleSpeed = 5
+let paddleSpeed = 6
 
 let officialPositionBearer
 let isOfficialPositionBearerBlurred
@@ -55,17 +55,17 @@ io.on('connection', function (socket) {
 
   socket.on('blur', function (data) {
     if (officialPositionBearer === data.id) {
-      console.log('king blurred', candidates)
+      // console.log('king blurred', candidates)
       if (candidates.length > 0) {
         officialPositionBearer = candidates[0]
-        console.log(data.id, 'got candidates, reassigning to', officialPositionBearer)
+        // console.log(data.id, 'got candidates, reassigning to', officialPositionBearer)
       } else {
         isOfficialPositionBearerBlurred = true
       }
     } else {
       // remove from candidates
       candidates.splice(candidates.indexOf(data.id), 1)
-      console.log('blur', data.id, candidates.length, 'candidates left')
+      // console.log('blur', data.id, candidates.length, 'candidates left')
     }
   })
 
@@ -77,7 +77,7 @@ io.on('connection', function (socket) {
         isOfficialPositionBearerBlurred = false
       } else {
         candidates.push(data.id)
-        console.log('focus', data.id, candidates.length, 'candidates left')
+        // console.log('focus', data.id, candidates.length, 'candidates left')
       }
     }
   })
@@ -100,15 +100,15 @@ io.on('connection', function (socket) {
 
   if (Object.keys(io.sockets.sockets).length === 1) {
     officialPositionBearer = socket.id
-    console.log('new king', socket.id)
+    // console.log('new king', socket.id)
   } else if (isOfficialPositionBearerBlurred) {
     officialPositionBearer = socket.id
     isOfficialPositionBearerBlurred = false
-    console.log('king blurred, new king', socket.id)
+    // console.log('king blurred, new king', socket.id)
   } else {
     // can someday become officialPositionBearer
     candidates.push(socket.id)
-    console.log('new candidate', socket.id, candidates)
+    // console.log('new candidate', socket.id, candidates)
   }
 
   const thisConnectedIsLeft = nextConnectedIsLeft
@@ -121,7 +121,7 @@ io.on('connection', function (socket) {
     if (officialPositionBearer === socket.id) {
       // the king is dead, long live the king
       officialPositionBearer = Object.keys(io.sockets.sockets)[0]
-      console.log('new king', officialPositionBearer)
+      // console.log('new king', officialPositionBearer)
     }
 
     candidates.splice(candidates.indexOf(socket.id), 1)
@@ -134,5 +134,5 @@ io.on('connection', function (socket) {
 })
 
 server.listen(_PORT_, function () {
-  console.log(`Listening on port ${_PORT_}...`)
+  // console.log(`Listening on port ${_PORT_}...`)
 })
