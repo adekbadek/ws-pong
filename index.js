@@ -24,16 +24,27 @@ let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}
 
-let paddleSpeed = 6
+let initialPaddleSpeed = 6
+let paddleSpeed = initialPaddleSpeed
 
 let officialPositionBearer
 let isOfficialPositionBearerBlurred
 let candidates = []
 
+const updatePaddleSpeed = () => {
+  let newPaddleSpeed = 6 / (io.engine.clientsCount / 2)
+  if (newPaddleSpeed !== paddleSpeed) {
+    paddleSpeed = newPaddleSpeed
+    console.log(`updated paddleSpeed to ${paddleSpeed}`)
+  }
+}
+
 // define events for any new connection
 io.on('connection', function (socket) {
   // io.emit will emit event to everyone
   // socket.emit will emit event just to specific connection
+
+  updatePaddleSpeed()
 
   // handle voting on direction
   socket.on('key-send', function (data) {
@@ -128,11 +139,13 @@ io.on('connection', function (socket) {
 
     thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
     io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
+
+    updatePaddleSpeed()
   })
 
   nextConnectedIsLeft = !nextConnectedIsLeft
 })
 
 server.listen(_PORT_, function () {
-  // console.log(`Listening on port ${_PORT_}...`)
+  console.log(`Listening on port ${_PORT_}...`)
 })
