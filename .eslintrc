@@ -3,7 +3,9 @@
   "rules": {
     "no-multiple-empty-lines": 1,
     "padded-blocks": 1,
-    "camelcase": 0
+    "camelcase": 0,
+    "quotes": 1,
+    "spaced-comment": 1
   },
   "env": {
     "browser": true,
