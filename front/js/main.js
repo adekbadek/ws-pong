@@ -156,7 +156,7 @@ var socket = io()
 
 // every second, server will update the position so all connections are on the same page
 socket.on('set-ball-pos', function (data) {
-  if (data.officialPositionBearer !== id) { ball.forceUpdate(data.ballPos) }
+  if (data.officialPositionBroadcaster !== id) { ball.forceUpdate(data.ballPos) }
 })
 
 socket.on('update-players-positions', function (data) {

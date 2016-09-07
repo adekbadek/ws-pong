@@ -31,8 +31,8 @@ let voters = {pLeft: 0, pRight: 0}
 let initialPaddleSpeed = 6
 let paddleSpeed = initialPaddleSpeed
 
-let officialPositionBearer
-let isOfficialPositionBearerBlurred
+let officialPositionBroadcaster
+let isOfficialPositionBroadcasterBlurred
 let candidates = []
 
 const updatePaddleSpeed = () => {
@@ -42,6 +42,22 @@ const updatePaddleSpeed = () => {
     console.log(`updated paddleSpeed to ${paddleSpeed}`)
   }
 }
+
+const chooseNewOfficialPositionBroadcaster = () => {
+  if (candidates.length >= 1) {
+    officialPositionBroadcaster = candidates[getRandomInt(0, candidates.length - 1)]
+    console.log('get new OPB')
+  }
+}
+
+// detect stalling
+let lastBallPos
+setInterval(() => {
+  if (lastBallPos === ballPos) {
+    chooseNewOfficialPositionBroadcaster()
+  }
+  lastBallPos = ballPos
+}, 1000)
 
 // define events for any new connection
 io.on('connection', function (socket) {
@@ -69,13 +85,13 @@ io.on('connection', function (socket) {
   })
 
   socket.on('blur', function (data) {
-    if (officialPositionBearer === data.id) {
-      // console.log('king blurred', candidates)
+    if (officialPositionBroadcaster === data.id) {
+      // console.log('OPB blurred', candidates)
       if (candidates.length > 0) {
-        officialPositionBearer = candidates[0]
-        // console.log(data.id, 'got candidates, reassigning to', officialPositionBearer)
+        officialPositionBroadcaster = candidates[0]
+        // console.log(data.id, 'got candidates, reassigning to', officialPositionBroadcaster)
       } else {
-        isOfficialPositionBearerBlurred = true
+        isOfficialPositionBroadcasterBlurred = true
       }
     } else {
       // remove from candidates
@@ -84,12 +100,12 @@ io.on('connection', function (socket) {
     }
   })
 
-  // if focused, can again sameday become the officialPositionBearer
+  // if focused, can again sameday become the officialPositionBroadcaster
   socket.on('focus', function (data) {
-    if (officialPositionBearer !== data.id) {
-      if (isOfficialPositionBearerBlurred) {
-        officialPositionBearer = data.id
-        isOfficialPositionBearerBlurred = false
+    if (officialPositionBroadcaster !== data.id) {
+      if (isOfficialPositionBroadcasterBlurred) {
+        officialPositionBroadcaster = data.id
+        isOfficialPositionBroadcasterBlurred = false
       } else {
         candidates.push(data.id)
         // console.log('focus', data.id, candidates.length, 'candidates left')
@@ -99,13 +115,12 @@ io.on('connection', function (socket) {
 
   socket.on('reload-ball-pos', function (data) {
     if (candidates.length > 0) {
-      officialPositionBearer = candidates[getRandomInt(0, candidates.length - 1)]
-      console.log('new king', officialPositionBearer)
+      chooseNewOfficialPositionBroadcaster()
     }
   })
 
   socket.on('ball-pos', function (data) {
-    if (data.id === officialPositionBearer) {
+    if (data.id === officialPositionBroadcaster) {
       ballPos = data.ballPos
     }
   })
@@ -117,18 +132,18 @@ io.on('connection', function (socket) {
 
   // every second, broadcast official ballPos
   setInterval(() => {
-    io.emit('set-ball-pos', {ballPos, officialPositionBearer})
+    io.emit('set-ball-pos', {ballPos, officialPositionBroadcaster})
   }, 1000)
 
   if (Object.keys(io.sockets.sockets).length === 1) {
-    officialPositionBearer = socket.id
-    // console.log('new king', socket.id)
-  } else if (isOfficialPositionBearerBlurred) {
-    officialPositionBearer = socket.id
-    isOfficialPositionBearerBlurred = false
-    // console.log('king blurred, new king', socket.id)
+    officialPositionBroadcaster = socket.id
+    // console.log('new OPB', socket.id)
+  } else if (isOfficialPositionBroadcasterBlurred) {
+    officialPositionBroadcaster = socket.id
+    isOfficialPositionBroadcasterBlurred = false
+    // console.log('OPB blurred, new OPB', socket.id)
   } else {
-    // can someday become officialPositionBearer
+    // can someday become officialPositionBroadcaster
     candidates.push(socket.id)
     // console.log('new candidate', socket.id, candidates)
   }
@@ -140,10 +155,10 @@ io.on('connection', function (socket) {
 
   io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
   socket.on('disconnect', function () {
-    if (officialPositionBearer === socket.id) {
-      // the king is dead, long live the king
-      officialPositionBearer = Object.keys(io.sockets.sockets)[0]
-      // console.log('new king', officialPositionBearer)
+    if (officialPositionBroadcaster === socket.id) {
+      // the OPB is dead, long live the OPB
+      chooseNewOfficialPositionBroadcaster()
+      // console.log('new OPB', officialPositionBroadcaster)
     }
 
     candidates.splice(candidates.indexOf(socket.id), 1)
