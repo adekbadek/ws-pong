@@ -182,13 +182,14 @@ var playerRightImg = 'data:image/png;base64,/9j/4QGKRXhpZgAATU0AKgAAAAgADAEAAAMA
 
 socket.on('init-game', function (data) {
   // initial score and player identification
-  isPlayerLeft = data.thisConnectedIsLeft
+  isPlayerLeft = data.lPaddle
+  console.log('is left', isPlayerLeft, data.lPaddle)
   score = data.score
 
   id = data.id
   console.log(id)
 
-  introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
+  introDir.innerHTML = ' ' + (data.lPaddle ? 'left' : 'right')
 
   ball = new Ball(data.ballPos)
   playerLeft = new Paddle(

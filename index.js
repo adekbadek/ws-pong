@@ -3,8 +3,12 @@ const http = require('http')
 
 const express = require('express')
 const app = express()
+const cookieParser = require('cookie-parser')
+const IOCookieParser = require('socket.io-cookie')
 const server = http.createServer(app)
 const io = require('socket.io')(server)
+app.use(cookieParser())
+io.use(IOCookieParser)
 
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
@@ -12,10 +16,6 @@ app.set('port', _PORT_)
 app.set('views', './front')
 app.set('view engine', 'pug')
 app.use(express.static(path.join(__dirname, 'public')))
-
-app.get('/', function (req, res) {
-  res.render('index')
-})
 
 // primordial initial pos / the state
 let nextConnectedIsLeft = true
@@ -38,6 +38,17 @@ const updatePaddleSpeed = () => {
     console.log(`updated paddleSpeed to ${paddleSpeed}`)
   }
 }
+
+app.get('/', function (req, res) {
+  if (req.cookies['lPaddle'] === undefined) {
+    // set team
+    res.cookie('lPaddle', nextConnectedIsLeft, { secure: process.env.NODE_ENV === 'production' })
+    console.log('setting team to', nextConnectedIsLeft)
+    nextConnectedIsLeft = !nextConnectedIsLeft
+    console.log('after will be', nextConnectedIsLeft)
+  }
+  res.render('index')
+})
 
 // define events for any new connection
 io.on('connection', function (socket) {
@@ -122,10 +133,11 @@ io.on('connection', function (socket) {
     // console.log('new candidate', socket.id, candidates)
   }
 
-  const thisConnectedIsLeft = nextConnectedIsLeft
-  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, score, id: socket.id})
+  const lPaddle = socket.request.headers.cookie.lPaddle
+  console.log('is left: ', lPaddle)
+  socket.emit('init-game', {playersPos, ballPos, lPaddle, score, id: socket.id})
 
-  thisConnectedIsLeft ? voters.pLeft += 1 : voters.pRight += 1
+  lPaddle ? voters.pLeft += 1 : voters.pRight += 1
 
   io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
   socket.on('disconnect', function () {
@@ -137,13 +149,11 @@ io.on('connection', function (socket) {
 
     candidates.splice(candidates.indexOf(socket.id), 1)
 
-    thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
+    lPaddle ? voters.pLeft -= 1 : voters.pRight -= 1
     io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
 
     updatePaddleSpeed()
   })
-
-  nextConnectedIsLeft = !nextConnectedIsLeft
 })
 
 server.listen(_PORT_, function () {
