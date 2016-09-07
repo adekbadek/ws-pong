@@ -127,6 +127,13 @@ io.on('connection', function (socket) {
 
   socket.on('score', function (playerId) {
     score[playerId] += 1
+    if (score.pRight !== score.pLeft) {
+      let sorted = Object.keys(score).sort(function (a, b) { return score[a] - score[b] })
+      score[sorted[1]] = score[sorted[1]] - score[sorted[0]]
+      score[sorted[0]] = 0
+    } else {
+      score.pRight = score.pLeft = 0
+    }
     io.emit('score', {score})
   })
 
