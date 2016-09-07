@@ -84,35 +84,6 @@ io.on('connection', function (socket) {
     io.emit('update-players-positions', playersPos)
   })
 
-  socket.on('blur', function (data) {
-    if (officialPositionBroadcaster === data.id) {
-      // console.log('OPB blurred', candidates)
-      if (candidates.length > 0) {
-        officialPositionBroadcaster = candidates[0]
-        // console.log(data.id, 'got candidates, reassigning to', officialPositionBroadcaster)
-      } else {
-        isOfficialPositionBroadcasterBlurred = true
-      }
-    } else {
-      // remove from candidates
-      candidates.splice(candidates.indexOf(data.id), 1)
-      // console.log('blur', data.id, candidates.length, 'candidates left')
-    }
-  })
-
-  // if focused, can again sameday become the officialPositionBroadcaster
-  socket.on('focus', function (data) {
-    if (officialPositionBroadcaster !== data.id) {
-      if (isOfficialPositionBroadcasterBlurred) {
-        officialPositionBroadcaster = data.id
-        isOfficialPositionBroadcasterBlurred = false
-      } else {
-        candidates.push(data.id)
-        // console.log('focus', data.id, candidates.length, 'candidates left')
-      }
-    }
-  })
-
   socket.on('reload-ball-pos', function (data) {
     if (candidates.length > 0) {
       chooseNewOfficialPositionBroadcaster()
