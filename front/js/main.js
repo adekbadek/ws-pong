@@ -1,3 +1,5 @@
+require('./../style')
+
 // https://robots.thoughtbot.com/pong-clone-in-javascript
 
 var animate = window.requestAnimationFrame ||

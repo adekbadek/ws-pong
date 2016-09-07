@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+const autoprefixer = require('autoprefixer')
 
 module.exports = {
   entry: './front/js/main.js',
@@ -6,7 +7,7 @@ module.exports = {
     filename: 'public/bundle.js'
   },
   resolve: {
-    extensions: ['', '.js']
+    extensions: ['', '.js', '.sass']
   },
   module: {
     loaders: [
@@ -16,8 +17,15 @@ module.exports = {
         query: {
           presets: ['es2015']
         }
+      },
+      {
+        test: /\.sass$/,
+        loaders: ['style', 'css', 'postcss-loader', 'sass']
       }
     ]
+  },
+  postcss: function () {
+    return [autoprefixer]
   },
   plugins: [
     new webpack.optimize.UglifyJsPlugin({
