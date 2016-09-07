@@ -18,7 +18,7 @@ app.get('/', function (req, res) {
 })
 
 const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
 // primordial initial pos / the state
@@ -37,7 +37,7 @@ let candidates = []
 
 const updatePaddleSpeed = () => {
   let newPaddleSpeed = 6 / (io.engine.clientsCount / 2)
-  if (newPaddleSpeed !== paddleSpeed) {
+  if (newPaddleSpeed !== paddleSpeed && newPaddleSpeed <= initialPaddleSpeed) {
     paddleSpeed = newPaddleSpeed
     console.log(`updated paddleSpeed to ${paddleSpeed}`)
   }
