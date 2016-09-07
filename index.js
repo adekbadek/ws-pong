@@ -17,6 +17,10 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 // primordial initial pos / the state
 let nextConnectedIsLeft = true
 let playersPos = {playerLeft: 212, playerLeftSpeed: 0, playerRight: 212, playerRightSpeed: 0}
@@ -90,6 +94,13 @@ io.on('connection', function (socket) {
         candidates.push(data.id)
         // console.log('focus', data.id, candidates.length, 'candidates left')
       }
+    }
+  })
+
+  socket.on('reload-ball-pos', function (data) {
+    if (candidates.length > 0) {
+      officialPositionBearer = candidates[getRandomInt(0, candidates.length - 1)]
+      console.log('new king', officialPositionBearer)
     }
   })
 

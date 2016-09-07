@@ -231,6 +231,8 @@ socket.on('init-game', function (data) {
     animate(step)
   }
 
+  window.reloadPos = () => socket.emit('reload-ball-pos')
+
   document.body.appendChild(canvas)
   animate(step)
 })
