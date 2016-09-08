@@ -36,6 +36,7 @@
     "postcss": "^5.1.2",
     "postcss-cli": "^2.6.0",
     "postcss-loader": "^0.11.1",
+    "redux": "^3.6.0",
     "sass-loader": "^4.0.2",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2"

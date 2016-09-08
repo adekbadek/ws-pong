@@ -105,7 +105,7 @@ io.on('connection', function (socket) {
     } else {
       score.pRight = score.pLeft = 0
     }
-    io.emit('score', {score})
+    io.emit('score', {score, voters})
   })
 
   // every second, broadcast official ballPos
@@ -127,11 +127,10 @@ io.on('connection', function (socket) {
   }
 
   const thisConnectedIsLeft = nextConnectedIsLeft
-  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, score, id: socket.id})
-
   thisConnectedIsLeft ? voters.pLeft += 1 : voters.pRight += 1
+  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, score, id: socket.id, voters})
 
-  io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
+  io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
   socket.on('disconnect', function () {
     if (officialPositionBroadcaster === socket.id) {
       // the OPB is dead, long live the OPB
@@ -142,7 +141,7 @@ io.on('connection', function (socket) {
     candidates.splice(candidates.indexOf(socket.id), 1)
 
     thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
-    io.emit('connections', {clientsCount: io.engine.clientsCount, voters})
+    io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
 
     updatePaddleSpeed()
   })
