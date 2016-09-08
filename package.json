@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "js": "webpack -p --config webpack.config.js",
+    "js": "webpack --config webpack.config.dev.js",
     "watch": "npm-watch",
-    "build": "npm run js"
+    "build": "webpack --config webpack.config.prod.js"
   },
   "watch": {
-    "js": ["front/**/*.js", "front/**/*.sass"]
+    "js": [
+      "front/**/*.js",
+      "front/**/*.sass"
+    ]
   },
   "author": "Adam Borowski",
   "license": "ISC",
