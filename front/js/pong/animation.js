@@ -6,30 +6,30 @@ export const animate = window.requestAnimationFrame ||
   function (callback) { window.setTimeout(callback, 1000 / 60) }
 
 // frame of animation
-export const step = function (canvasConfig, gameElements) {
+export const step = function (canvas, gameElements) {
   const scores = stateStore.getState().score
   const voters = stateStore.getState().voters
 
   gameElements.ballGlobal.update(gameElements.playerLeftGlobal, gameElements.playerRightGlobal)
 
-  canvasConfig.context.fillStyle = '#00f'
-  canvasConfig.context.fillRect(0, 0, canvasConfig.width, canvasConfig.height)
-  canvasConfig.context.font = '16px sans-serif'
-  canvasConfig.context.fillStyle = canvasConfig.strokeColor
-  canvasConfig.context.fillText('score', canvasConfig.width / 2 - canvasConfig.context.measureText('score').width / 2, 18)
-  canvasConfig.context.fillText('voters', canvasConfig.width / 2 - canvasConfig.context.measureText('voters').width / 2, canvasConfig.height - 10)
-  canvasConfig.context.font = '20px sans-serif'
+  canvas.context.fillStyle = '#00f'
+  canvas.context.fillRect(0, 0, canvas.width, canvas.height)
+  canvas.context.font = '16px sans-serif'
+  canvas.context.fillStyle = canvas.strokeColor
+  canvas.context.fillText('score', canvas.width / 2 - canvas.context.measureText('score').width / 2, 18)
+  canvas.context.fillText('voters', canvas.width / 2 - canvas.context.measureText('voters').width / 2, canvas.height - 10)
+  canvas.context.font = '20px sans-serif'
   // scores
-  canvasConfig.context.fillText(scores.pLeft, canvasConfig.width / 2 - canvasConfig.context.measureText(scores.pLeft).width - 4, 40)
-  canvasConfig.context.fillText('-', canvasConfig.width / 2 - 2, 40)
-  canvasConfig.context.fillText(scores.pRight, canvasConfig.width / 2 + 6, 40)
+  canvas.context.fillText(scores.pLeft, canvas.width / 2 - canvas.context.measureText(scores.pLeft).width - 4, 40)
+  canvas.context.fillText('-', canvas.width / 2 - 2, 40)
+  canvas.context.fillText(scores.pRight, canvas.width / 2 + 6, 40)
   // voters
-  canvasConfig.context.fillText(voters.pLeft, canvasConfig.width / 2 - canvasConfig.context.measureText(voters.pLeft).width - 4, canvasConfig.height - 30)
-  canvasConfig.context.fillText(':', canvasConfig.width / 2 - 2, canvasConfig.height - 30)
-  canvasConfig.context.fillText(voters.pRight, canvasConfig.width / 2 + 6, canvasConfig.height - 30)
+  canvas.context.fillText(voters.pLeft, canvas.width / 2 - canvas.context.measureText(voters.pLeft).width - 4, canvas.height - 30)
+  canvas.context.fillText(':', canvas.width / 2 - 2, canvas.height - 30)
+  canvas.context.fillText(voters.pRight, canvas.width / 2 + 6, canvas.height - 30)
   gameElements.playerLeftGlobal.render()
   gameElements.playerRightGlobal.render()
   gameElements.ballGlobal.render()
 
-  animate(() => { step(canvasConfig, gameElements, scores, voters) })
+  animate(() => { step(canvas, gameElements, scores, voters) })
 }

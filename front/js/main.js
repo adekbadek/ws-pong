@@ -4,18 +4,8 @@ import {updateState} from './store'
 
 import Paddle from './pong/paddle'
 import Ball from './pong/ball'
+import Canvas from './pong/canvas'
 import {step, animate} from './pong/animation'
-
-var canvas = document.createElement('canvas')
-const canvasConfig = {
-  context: canvas.getContext('2d'),
-  height: 500,
-  width: 800,
-  strokeColor: '#fff'
-}
-canvas.id = 'canvas'
-canvas.width = canvasConfig.width
-canvas.height = canvasConfig.height
 
 // Controls
 
@@ -72,18 +62,20 @@ socket.on('init-game', function (data) {
 
   introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
 
+  const canvas = new Canvas({'width': 800, 'height': 500, strokeColor: '#fff'})
+
   ballGlobal = new Ball(
     data.ballPos,
-    canvasConfig,
-    () => {
+    canvas,
+    (ball) => {
       // update ball pos info on backend to use for new connections and forced updates
       socket.emit('ball-pos', {ballPos: {
-        x: this.x,
-        y: this.y,
-        x_speed: this.x_speed,
-        y_speed: this.y_speed
+        x: ball.x,
+        y: ball.y,
+        x_speed: ball.x_speed,
+        y_speed: ball.y_speed
       },
-      idGlobal})
+      id: idGlobal})
     },
     (x) => {
       socket.emit('score', (x < 0 ? 'pRight' : 'pLeft'))
@@ -91,28 +83,27 @@ socket.on('init-game', function (data) {
   )
 
   playerLeftGlobal = new Paddle(
-    canvasConfig,
+    canvas,
     20,
     data.playersPos.playerLeft,
     playerLeftImg
   )
   playerRightGlobal = new Paddle(
-    canvasConfig,
-    canvasConfig.width - 40,
+    canvas,
+    canvas.width - 40,
     data.playersPos.playerRight,
     playerRightImg
   )
 
-  document.body.style.backgroundImage = 'url("' + (isPlayerLeftGlobal ? playerLeftImg : playerRightImg) + '")'
-  document.body.style.opacity = 1
-
   animate(() => {
-    step(canvasConfig, {playerLeftGlobal, playerRightGlobal, ballGlobal})
+    step(canvas, {playerLeftGlobal, playerRightGlobal, ballGlobal})
   })
 
   window.reloadPos = () => socket.emit('reload-ball-pos')
 
-  document.body.appendChild(canvas)
+  document.body.style.backgroundImage = 'url("' + (isPlayerLeftGlobal ? playerLeftImg : playerRightImg) + '")'
+  document.body.style.opacity = 1
+  document.body.appendChild(canvas.canvasEl)
 })
 
 closeBtn.onclick = function () {

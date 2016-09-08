@@ -1,7 +1,7 @@
 // Paddle. A player is a paddle.
 
 export default class Paddle {
-  constructor (canvasConfig, x, y, imgSrc) {
+  constructor (canvas, x, y, imgSrc) {
     this.x = x
     this.y = y
     this.width = 20
@@ -9,9 +9,9 @@ export default class Paddle {
     this.x_speed = 0
     this.y_speed = 0
     this.imgSrc = imgSrc
-    this.context = canvasConfig.context
-    this.canvasHeight = canvasConfig.height
-    this.strokeColor = canvasConfig.strokeColor
+    this.context = canvas.context
+    this.canvasHeight = canvas.height
+    this.strokeColor = canvas.strokeColor
   }
 
   render () {
