@@ -2,9 +2,9 @@ require('./../style')
 
 import {updateState} from './store'
 
-import Paddle from './paddle'
-import Ball from './ball'
-import {step, animate} from './animation'
+import Paddle from './pong/paddle'
+import Ball from './pong/ball'
+import {step, animate} from './pong/animation'
 
 var canvas = document.createElement('canvas')
 const canvasConfig = {

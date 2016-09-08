@@ -1,4 +1,4 @@
-import {stateStore} from './store'
+import {stateStore} from './../store'
 
 export const animate = window.requestAnimationFrame ||
   window.webkitRequestAnimationFrame ||
