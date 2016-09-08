@@ -8,3 +8,7 @@ const scoreReducer = (state, action) => {
 }
 
 export const stateStore = createStore(scoreReducer)
+
+export const updateState = (data) => {
+  stateStore.dispatch({type: 'UPDATE_STATE', data: {score: data.score, voters: data.voters}})
+}

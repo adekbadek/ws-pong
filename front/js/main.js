@@ -1,12 +1,10 @@
 require('./../style')
 
-import {stateStore} from './store'
+import {updateState} from './store'
 
 import Paddle from './paddle'
 import Ball from './ball'
 import {step, animate} from './animation'
-
-// https://robots.thoughtbot.com/pong-clone-in-javascript
 
 var canvas = document.createElement('canvas')
 const canvasConfig = {
@@ -56,11 +54,11 @@ socket.on('update-players-positions', function (data) {
 })
 
 socket.on('score', function (data) {
-  stateStore.dispatch({type: 'UPDATE_STATE', data: {score: data.score, voters: data.voters}})
+  updateState(data)
 })
 
 socket.on('connections', function (data) {
-  stateStore.dispatch({type: 'UPDATE_STATE', data: {score: data.score, voters: data.voters}})
+  updateState(data)
   introNum.innerHTML = ' ' + (data.voters[isPlayerLeftGlobal ? 'pLeft' : 'pRight'] - 1)
   introNumOther.innerHTML = ' ' + data.voters[isPlayerLeftGlobal ? 'pRight' : 'pLeft']
 })
@@ -68,7 +66,7 @@ socket.on('connections', function (data) {
 socket.on('init-game', function (data) {
   // initial score and player identification
   isPlayerLeftGlobal = data.thisConnectedIsLeft
-  stateStore.dispatch({type: 'UPDATE_STATE', data: {score: data.score, voters: data.voters}})
+  updateState(data)
 
   idGlobal = data.id
 
