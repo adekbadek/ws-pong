@@ -126,7 +126,7 @@ Ball.prototype.update = function (paddleLeft, paddleRigth) {
     x_speed: this.x_speed,
     y_speed: this.y_speed
   },
-  id})
+  idGlobal})
 }
 
 // Controls
@@ -138,17 +138,17 @@ var introDir = document.getElementById('intro-dir')
 var closeBtn = document.getElementById('btn-close')
 
 window.addEventListener('keydown', function (e) {
-  if (e.keyCode === 38) { socket.emit('key-send', isPlayerLeft ? 'left-up' : 'right-up') }
-  if (e.keyCode === 40) { socket.emit('key-send', isPlayerLeft ? 'left-down' : 'right-down') }
+  if (e.keyCode === 38) { socket.emit('key-send', isPlayerLeftGlobal ? 'left-up' : 'right-up') }
+  if (e.keyCode === 40) { socket.emit('key-send', isPlayerLeftGlobal ? 'left-down' : 'right-down') }
 })
 
-var ball
-var playerLeft
-var playerRight
-var isPlayerLeft
-var score
-var voters
-var id
+var ballGlobal
+var playerLeftGlobal
+var playerRightGlobal
+var isPlayerLeftGlobal
+var scoreGlobal
+var votersGlobal
+var idGlobal
 
 // Socket
 const io = require('socket.io-client')
@@ -156,22 +156,22 @@ var socket = io()
 
 // every second, server will update the position so all connections are on the same page
 socket.on('set-ball-pos', function (data) {
-  if (data.officialPositionBroadcaster !== id) { ball.forceUpdate(data.ballPos) }
+  if (data.officialPositionBroadcaster !== idGlobal) { ballGlobal.forceUpdate(data.ballPos) }
 })
 
 socket.on('update-players-positions', function (data) {
-  playerLeft.move(data.playerLeft, data.playerLeftSpeed)
-  playerRight.move(data.playerRight, data.playerRightSpeed)
+  playerLeftGlobal.move(data.playerLeft, data.playerLeftSpeed)
+  playerRightGlobal.move(data.playerRight, data.playerRightSpeed)
 })
 
 socket.on('score', function (data) {
-  score = data.score
+  scoreGlobal = data.score
 })
 
 socket.on('connections', function (data) {
-  voters = data.voters
-  introNum.innerHTML = ' ' + (data.voters[isPlayerLeft ? 'pLeft' : 'pRight'] - 1)
-  introNumOther.innerHTML = ' ' + data.voters[isPlayerLeft ? 'pRight' : 'pLeft']
+  votersGlobal = data.voters
+  introNum.innerHTML = ' ' + (data.voters[isPlayerLeftGlobal ? 'pLeft' : 'pRight'] - 1)
+  introNumOther.innerHTML = ' ' + data.voters[isPlayerLeftGlobal ? 'pRight' : 'pLeft']
 })
 
 var secColor = '#fff'
@@ -180,32 +180,32 @@ var playerRightImg = 'data:image/png;base64,/9j/4QGKRXhpZgAATU0AKgAAAAgADAEAAAMA
 
 socket.on('init-game', function (data) {
   // initial score and player identification
-  isPlayerLeft = data.thisConnectedIsLeft
-  score = data.score
+  isPlayerLeftGlobal = data.thisConnectedIsLeft
+  scoreGlobal = data.score
 
-  id = data.id
-  console.log(id)
+  idGlobal = data.id
+  console.log(idGlobal)
 
   introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
 
-  ball = new Ball(data.ballPos)
-  playerLeft = new Paddle(
+  ballGlobal = new Ball(data.ballPos)
+  playerLeftGlobal = new Paddle(
     20,
     data.playersPos.playerLeft,
     playerLeftImg
   )
-  playerRight = new Paddle(
+  playerRightGlobal = new Paddle(
     width - 40,
     data.playersPos.playerRight,
     playerRightImg
   )
 
-  document.body.style.backgroundImage = 'url("' + (isPlayerLeft ? playerLeftImg : playerRightImg) + '")'
+  document.body.style.backgroundImage = 'url("' + (isPlayerLeftGlobal ? playerLeftImg : playerRightImg) + '")'
   document.body.style.opacity = 1
 
   // frame of animation
   var step = function () {
-    ball.update(playerLeft, playerRight)
+    ballGlobal.update(playerLeftGlobal, playerRightGlobal)
 
     context.fillStyle = '#00f'
     context.fillRect(0, 0, width, height)
@@ -215,16 +215,16 @@ socket.on('init-game', function (data) {
     context.fillText('voters', width / 2 - context.measureText('voters').width / 2, height - 10)
     context.font = '20px sans-serif'
     // scores
-    context.fillText(score.pLeft, width / 2 - context.measureText(score.pLeft).width - 4, 40)
+    context.fillText(scoreGlobal.pLeft, width / 2 - context.measureText(scoreGlobal.pLeft).width - 4, 40)
     context.fillText('-', width / 2 - 2, 40)
-    context.fillText(score.pRight, width / 2 + 6, 40)
+    context.fillText(scoreGlobal.pRight, width / 2 + 6, 40)
     // voters
-    context.fillText(voters.pLeft, width / 2 - context.measureText(voters.pLeft).width - 4, height - 30)
+    context.fillText(votersGlobal.pLeft, width / 2 - context.measureText(votersGlobal.pLeft).width - 4, height - 30)
     context.fillText(':', width / 2 - 2, height - 30)
-    context.fillText(voters.pRight, width / 2 + 6, height - 30)
-    playerLeft.render()
-    playerRight.render()
-    ball.render()
+    context.fillText(votersGlobal.pRight, width / 2 + 6, height - 30)
+    playerLeftGlobal.render()
+    playerRightGlobal.render()
+    ballGlobal.render()
 
     animate(step)
   }
