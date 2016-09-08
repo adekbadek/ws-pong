@@ -5,7 +5,8 @@
     "padded-blocks": 1,
     "camelcase": 0,
     "quotes": 1,
-    "spaced-comment": 1
+    "spaced-comment": 1,
+    "semi": 1
   },
   "env": {
     "browser": true,
