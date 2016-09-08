@@ -10,7 +10,7 @@
     "build": "npm run js"
   },
   "watch": {
-    "js": ["front/js/main.js", "front/style.sass"]
+    "js": ["front/**/*.js", "front/**/*.sass"]
   },
   "author": "Adam Borowski",
   "license": "ISC",
