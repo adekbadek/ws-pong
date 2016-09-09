@@ -4,14 +4,12 @@ import {animate} from '../game/animation'
 
 // here the game is started
 
-const p1 = new Paddle(
-  null, // canvas
-  20, // x pos
+const leftPaddle = new Paddle(
+  20,
   process.env.PLAYER_INIT_Y
 )
-const p2 = new Paddle(
-  null, // canvas
-  process.env.CANVAS_WIDTH - 20, // x pos
+const rightPaddle = new Paddle(
+  process.env.CANVAS_WIDTH - 20,
   process.env.PLAYER_INIT_Y
 )
 
@@ -20,7 +18,6 @@ const ball = new Ball(
   {width: process.env.CANVAS_WIDTH, height: process.env.CANVAS_HEIGHT}, // canvas
   (ball) => {
     // TODO: emit ball pos update here
-    console.log(ball.x)
   }, // update callback
   (x) => {
     // socket.emit('score', (x < 0 ? 'pRight' : 'pLeft'))
@@ -29,8 +26,7 @@ const ball = new Ball(
 
 let step = () => {
   // every frame
-
-  ball.update(p1, p2)
+  ball.update(leftPaddle, rightPaddle)
 
   animate(step)
 }

@@ -1,7 +1,7 @@
 // Paddle. A player is a paddle.
 
 export default class Paddle {
-  constructor (canvas, x, y, imgSrc) {
+  constructor (x, y, canvas, imgSrc) {
     this.x = x
     this.y = y
     this.width = 20

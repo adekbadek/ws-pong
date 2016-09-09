@@ -83,15 +83,15 @@ socket.on('init-game', function (data) {
   )
 
   playerLeftGlobal = new Paddle(
-    canvas,
     20,
     data.playersPos.playerLeft,
+    canvas,
     playerLeftImg
   )
   playerRightGlobal = new Paddle(
-    canvas,
     canvas.width - 40,
     data.playersPos.playerRight,
+    canvas,
     playerRightImg
   )
 
