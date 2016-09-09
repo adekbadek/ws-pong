@@ -6,7 +6,7 @@ const app = express()
 const server = http.createServer(app)
 const io = require('socket.io')(server)
 
-require('./game')
+import * as serverGame from './game'
 
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
@@ -82,6 +82,11 @@ io.on('connection', function (socket) {
       playersPos.playerLeft += paddleSpeed
       playersPos.playerLeftSpeed = paddleSpeed
     }
+
+    // update server game's paddles
+    serverGame.rightPaddle.move(playersPos.playerRight, playersPos.playerRightSpeed)
+    serverGame.leftPaddle.move(playersPos.playerLeft, playersPos.playerLeftSpeed)
+
     io.emit('update-players-positions', playersPos)
   })
 
