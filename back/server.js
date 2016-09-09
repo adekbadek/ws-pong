@@ -7,6 +7,7 @@ const server = http.createServer(app)
 const io = require('socket.io')(server)
 
 import * as serverGame from './game'
+import * as utils from './utils'
 
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
@@ -69,24 +70,13 @@ io.on('connection', function (socket) {
 
   // handle voting on direction
   socket.on('key-send', function (data) {
-    if (data === 'right-up') {
-      playersPos.playerRight -= paddleSpeed
-      playersPos.playerRightSpeed = -paddleSpeed
-    } else if (data === 'right-down') {
-      playersPos.playerRight += paddleSpeed
-      playersPos.playerRightSpeed = paddleSpeed
-    } else if (data === 'left-up') {
-      playersPos.playerLeft -= paddleSpeed
-      playersPos.playerLeftSpeed = -paddleSpeed
-    } else if (data === 'left-down') {
-      playersPos.playerLeft += paddleSpeed
-      playersPos.playerLeftSpeed = paddleSpeed
-    }
+    playersPos = utils.updatePlayersPosition(playersPos, paddleSpeed, data)
 
     // update server game's paddles
     serverGame.rightPaddle.move(playersPos.playerRight, playersPos.playerRightSpeed)
     serverGame.leftPaddle.move(playersPos.playerLeft, playersPos.playerLeftSpeed)
 
+    // update client's paddles
     io.emit('update-players-positions', playersPos)
   })
 
@@ -103,14 +93,7 @@ io.on('connection', function (socket) {
   })
 
   socket.on('score', function (playerId) {
-    score[playerId] += 1
-    if (score.pRight !== score.pLeft) {
-      let sorted = Object.keys(score).sort(function (a, b) { return score[a] - score[b] })
-      score[sorted[1]] = score[sorted[1]] - score[sorted[0]]
-      score[sorted[0]] = 0
-    } else {
-      score.pRight = score.pLeft = 0
-    }
+    score = utils.updateScore(score, playerId)
     io.emit('score', {score, voters})
   })
 
