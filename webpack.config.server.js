@@ -13,6 +13,10 @@ fs.readdirSync('node_modules')
 module.exports = {
   entry: './back/server.js',
   target: 'node',
+  node: {
+    __dirname: false,
+    __filename: false
+  },
   output: {
     filename: 'index.js'
   },
