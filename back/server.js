@@ -32,7 +32,6 @@ let initialPaddleSpeed = 24
 let paddleSpeed = initialPaddleSpeed
 
 let officialPositionBroadcaster
-let isOfficialPositionBroadcasterBlurred
 let candidates = []
 
 const updatePaddleSpeed = () => {
@@ -116,10 +115,6 @@ io.on('connection', function (socket) {
   if (Object.keys(io.sockets.sockets).length === 1) {
     officialPositionBroadcaster = socket.id
     // console.log('new OPB', socket.id)
-  } else if (isOfficialPositionBroadcasterBlurred) {
-    officialPositionBroadcaster = socket.id
-    isOfficialPositionBroadcasterBlurred = false
-    // console.log('OPB blurred, new OPB', socket.id)
   } else {
     // can someday become officialPositionBroadcaster
     candidates.push(socket.id)
