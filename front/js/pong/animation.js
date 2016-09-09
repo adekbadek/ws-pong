@@ -1,11 +1,18 @@
 import {stateStore} from './../store'
 
-export const animate = window.requestAnimationFrame ||
-  window.webkitRequestAnimationFrame ||
-  window.mozRequestAnimationFrame ||
-  function (callback) { window.setTimeout(callback, 1000 / 60) }
+let animate
+if (typeof window !== 'undefined') {
+  animate = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) { window.setTimeout(callback, 1000 / 60) }
+} else {
+  animate = function (callback) { setTimeout(callback, 1000 / 60) }
+}
 
-// frame of animation
+export {animate}
+
+// frame of animation for browser
 export const step = function (canvas, gameElements) {
   const scores = stateStore.getState().score
   const voters = stateStore.getState().voters
