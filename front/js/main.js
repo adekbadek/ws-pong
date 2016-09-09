@@ -1,6 +1,6 @@
 require('./../style')
 
-import {updateState} from './store'
+import {updateState, stateStore} from './store'
 
 import Paddle from '../../game/paddle'
 import Ball from '../../game/ball'
@@ -96,7 +96,12 @@ socket.on('init-game', function (data) {
   )
 
   animate(() => {
-    step(canvas, {playerLeftGlobal, playerRightGlobal, ballGlobal})
+    step(
+      canvas,
+      {playerLeftGlobal, playerRightGlobal, ballGlobal},
+      stateStore.getState().score,
+      stateStore.getState().voters
+    )
   })
 
   window.reloadPos = () => socket.emit('reload-ball-pos')

@@ -1,7 +1,3 @@
-import {stateStore} from './../front/js/store'
-
-// TODO: dont import store, pass arg to step?
-
 let animate
 if (typeof window !== 'undefined') {
   animate = window.requestAnimationFrame ||
@@ -15,10 +11,7 @@ if (typeof window !== 'undefined') {
 export {animate}
 
 // frame of animation for browser
-export const step = function (canvas, gameElements) {
-  const scores = stateStore.getState().score
-  const voters = stateStore.getState().voters
-
+export const step = function (canvas, gameElements, scores, voters) {
   gameElements.ballGlobal.update(gameElements.playerLeftGlobal, gameElements.playerRightGlobal)
 
   canvas.context.fillStyle = '#00f'
