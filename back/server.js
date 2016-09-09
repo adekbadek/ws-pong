@@ -7,7 +7,7 @@ const server = http.createServer(app)
 const io = require('socket.io')(server)
 
 import * as serverGame from './game'
-import * as utils from './utils'
+import * as utils from '../game/utils'
 
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
