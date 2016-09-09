@@ -11,7 +11,10 @@ if (typeof window !== 'undefined') {
 export {animate}
 
 // frame of animation for browser
-export const step = function (canvas, gameElements, scores, voters) {
+export const step = function (canvas, gameElements, store) {
+  let scores = store.getState().score
+  let voters = store.getState().voters
+
   gameElements.ballGlobal.update(gameElements.playerLeftGlobal, gameElements.playerRightGlobal)
 
   canvas.context.fillStyle = '#00f'
@@ -33,5 +36,5 @@ export const step = function (canvas, gameElements, scores, voters) {
   gameElements.playerRightGlobal.render()
   gameElements.ballGlobal.render()
 
-  animate(() => { step(canvas, gameElements, scores, voters) })
+  animate(() => { step(canvas, gameElements, store) })
 }

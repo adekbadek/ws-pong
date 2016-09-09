@@ -99,8 +99,7 @@ socket.on('init-game', function (data) {
     step(
       canvas,
       {playerLeftGlobal, playerRightGlobal, ballGlobal},
-      stateStore.getState().score,
-      stateStore.getState().voters
+      stateStore
     )
   })
 
