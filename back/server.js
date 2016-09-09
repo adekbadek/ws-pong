@@ -6,6 +6,8 @@ const app = express()
 const server = http.createServer(app)
 const io = require('socket.io')(server)
 
+require('./phantom')
+
 const _PORT_ = process.env.PORT || 3000
 app.set('port', _PORT_)
 
@@ -16,12 +18,6 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.get('/', function (req, res) {
   res.render('index')
 })
-
-
-import Canvas from './front/js/pong/canvas'
-// const canvas = new Canvas({'width': 800, 'height': 500, strokeColor: '#fff'})
-// console.log(canvas)
-
 
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min
