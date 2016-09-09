@@ -24,8 +24,8 @@ export const updatePlayersPosition = (playersPos, paddleSpeed, data) => {
 }
 
 // get score, add point for a player, return difference in scores as a new score
-export const updateScore = (score, playerId) => {
-  score[playerId] += 1
+export const updateScore = (score, playerSide) => {
+  score[playerSide] += 1
   if (score.pRight !== score.pLeft) {
     let sorted = Object.keys(score).sort(function (a, b) { return score[a] - score[b] })
     score[sorted[1]] = score[sorted[1]] - score[sorted[0]]

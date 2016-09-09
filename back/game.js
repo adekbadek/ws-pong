@@ -22,7 +22,9 @@ export const ball = new Ball(
   },
   (x) => {
     // TODO: emit score
-    // io.emit('score', (x < 0 ? 'pRight' : 'pLeft'))
+    // let playerSide = (x < 0 ? 'pRight' : 'pLeft')
+    // score = utils.updateScore(score, playerSide) // what is the score
+    // io.emit('score', score)
   }
 )
 
