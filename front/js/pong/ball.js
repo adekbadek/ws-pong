@@ -7,8 +7,11 @@ export default class Ball {
     this.y_speed = config.y_speed
     this.radius = 5
     this.canvas = canvas
+    this.updateCallback = updateCallback || null
     this.scoreCallback = scoreCallback
-    this.updateCallback = updateCallback
+    //
+    this.canvasHeight = process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__
+    this.canvasWidth = process ? process.env.CANVAS_WIDTH : __CANVAS_WIDTH__
   }
 
   render () {
@@ -36,20 +39,20 @@ export default class Ball {
     if (this.y - this.radius < 0) { // hitting the top wall
       this.y = this.radius
       this.y_speed = -this.y_speed
-    } else if (this.y + this.radius > this.canvas.height) { // hitting the bottom wall
-      this.y = this.canvas.height - this.radius
+    } else if (this.y + this.radius > this.canvasHeight) { // hitting the bottom wall
+      this.y = this.canvasHeight - this.radius
       this.y_speed = -this.y_speed
     }
 
-    if (this.x < 0 || this.x > this.canvas.width) { // a point was scored
+    if (this.x < 0 || this.x > this.canvasWidth) { // a point was scored
       this.scoreCallback(this.x)
       this.x_speed = (this.x < 0 ? -this.speed : this.speed) * 0.6 // slomo
       this.y_speed = 0
-      this.x = this.canvas.width / 2
-      this.y = this.canvas.height / 2
+      this.x = this.canvasWidth / 2
+      this.y = this.canvasHeight / 2
     }
 
-    if (this.x < this.canvas.width / 2) {
+    if (this.x < this.canvasWidth / 2) {
       // the ball is on the left
       if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius * 2 && ballTop > paddleLeft.y - this.radius * 2) {
         // hit the playerLeft's paddle
@@ -66,6 +69,6 @@ export default class Ball {
         this.x += this.x_speed
       }
     }
-    this.updateCallback(this)
+    if (this.updateCallback) { this.updateCallback(this) }
   }
 }

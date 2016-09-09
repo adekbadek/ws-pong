@@ -8,16 +8,20 @@ export default class Paddle {
     this.height = 80
     this.x_speed = 0
     this.y_speed = 0
-    this.imgSrc = imgSrc
-    this.context = canvas.context
-    this.canvasHeight = canvas.height
-    this.strokeColor = canvas.strokeColor
+    this.maxY = process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__
+    if (imgSrc) {
+      var img = document.createElement('img')
+      img.src = imgSrc
+      this.img = img
+    }
+    if (canvas) {
+      this.context = canvas.context
+      this.strokeColor = canvas.strokeColor
+    }
   }
 
   render () {
-    var img = document.createElement('img')
-    img.src = this.imgSrc
-    this.context.fillStyle = this.context.createPattern(img, 'repeat')
+    this.context.fillStyle = this.context.createPattern(this.img, 'repeat')
     this.context.fillRect(this.x, this.y, this.width, this.height)
     this.context.strokeStyle = this.strokeColor
     this.context.lineWidth = 2
@@ -30,8 +34,8 @@ export default class Paddle {
     if (this.y < 0) { // all the way to the top
       this.y = 0
       this.y_speed = 0
-    } else if (this.y + this.height > this.canvasHeight) { // all the way to the bottom
-      this.y = this.canvasHeight - this.height
+    } else if (this.y + this.height > this.maxY) { // all the way to the bottom
+      this.y = this.maxY - this.height
       this.y_speed = 0
     }
   }
