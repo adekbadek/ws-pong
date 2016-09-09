@@ -14,10 +14,12 @@
   "watch": {
     "webpack:front": [
       "front/**/*.js",
+      "game/**/*.js",
       "front/**/*.sass"
     ],
     "webpack:server": [
-      "back/**/*.js"
+      "back/**/*.js",
+      "game/**/*.js"
     ]
   },
   "author": "Adam Borowski",

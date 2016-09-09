@@ -1,4 +1,6 @@
-import {stateStore} from './../store'
+import {stateStore} from './../front/js/store'
+
+// TODO: dont import store, pass arg to step?
 
 let animate
 if (typeof window !== 'undefined') {

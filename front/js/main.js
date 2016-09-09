@@ -2,10 +2,10 @@ require('./../style')
 
 import {updateState} from './store'
 
-import Paddle from './pong/paddle'
-import Ball from './pong/ball'
-import Canvas from './pong/canvas'
-import {step, animate} from './pong/animation'
+import Paddle from '../../game/paddle'
+import Ball from '../../game/ball'
+import Canvas from '../../game/canvas'
+import {step, animate} from '../../game/animation'
 
 // Controls
 
