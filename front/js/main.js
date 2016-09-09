@@ -62,7 +62,7 @@ socket.on('init-game', function (data) {
 
   introDir.innerHTML = ' ' + (data.thisConnectedIsLeft ? 'left' : 'right')
 
-  const canvas = new Canvas({'width': 800, 'height': 500, strokeColor: '#fff'})
+  const canvas = new Canvas({'width': __CANVAS_WIDTH__, 'height': __CANVAS_HEIGHT__, strokeColor: '#fff'})
 
   ballGlobal = new Ball(
     data.ballPos,

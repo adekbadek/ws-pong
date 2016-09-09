@@ -11,5 +11,9 @@
   "env": {
     "browser": true,
     "node": true
+  },
+  "globals": {
+    "__CANVAS_WIDTH__": true,
+    "__CANVAS_HEIGHT__": true
   }
 }

@@ -23,8 +23,8 @@ const getRandomInt = (min, max) => {
 
 // primordial initial pos / the state
 let nextConnectedIsLeft = true
-let playersPos = {playerLeft: 212, playerLeftSpeed: 0, playerRight: 212, playerRightSpeed: 0}
-let ballPos = {x: 400, y: 250, x_speed: 3, y_speed: 0}
+let playersPos = {playerLeft: process.env.PLAYER_INIT_Y, playerLeftSpeed: 0, playerRight: process.env.PLAYER_INIT_Y, playerRightSpeed: 0}
+let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}
 

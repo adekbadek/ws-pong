@@ -5,13 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "webpack": "webpack --config webpack.config.dev.js",
-    "watch": "npm-watch",
-    "build": "webpack --config webpack.config.prod.js",
-    "webpack:server": "webpack --config webpack.config.server.js"
+    "dev": "env-cmd ./.env node index.js",
+    "webpack:front": "env-cmd ./.env webpack --config webpack.config.dev.js",
+    "webpack:server": "env-cmd ./.env webpack --config webpack.config.server.js",
+    "watch": "env-cmd ./.env npm-watch",
+    "build": "env-cmd ./.env webpack --config webpack.config.prod.js && npm run webpack:server"
   },
   "watch": {
-    "webpack": [
+    "webpack:front": [
       "front/**/*.js",
       "front/**/*.sass"
     ],
@@ -35,6 +36,7 @@
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
     "css-loader": "^0.25.0",
+    "env-cmd": "^2.1.0",
     "eslint": "^3.4.0",
     "eslint-config-standard": "^6.0.0",
     "eslint-plugin-promise": "^2.0.1",

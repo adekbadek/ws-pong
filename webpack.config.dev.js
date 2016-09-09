@@ -1,3 +1,4 @@
+const webpack = require('webpack')
 const autoprefixer = require('autoprefixer')
 
 module.exports = {
@@ -25,5 +26,11 @@ module.exports = {
   },
   postcss: function () {
     return [autoprefixer]
-  }
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      __CANVAS_WIDTH__: process.env.CANVAS_WIDTH,
+      __CANVAS_HEIGHT__: process.env.CANVAS_HEIGHT
+    })
+  ]
 }
