@@ -9,7 +9,7 @@ export const leftPaddle = new Paddle(
   process.env.PLAYER_INIT_Y
 )
 export const rightPaddle = new Paddle(
-  process.env.CANVAS_WIDTH - 20,
+  process.env.CANVAS_WIDTH - 40,
   process.env.PLAYER_INIT_Y
 )
 

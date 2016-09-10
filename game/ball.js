@@ -53,7 +53,6 @@ export default class Ball {
       // the ball is on the left
       if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius * 2 && ballTop > paddleLeft.y - this.radius * 2) {
         // hit the playerLeft's paddle
-        if (process) { console.log('hit left paddle') }
         this.x_speed = this.speed
         this.y_speed += (paddleLeft.y_speed / 2)
         this.x += this.x_speed
@@ -62,7 +61,6 @@ export default class Ball {
       // the ball is on the right
       if (ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius * 2 && ballTop > paddleRigth.y - this.radius * 2 && ballRight > paddleRigth.x) {
         // hit the playerRight's paddle
-        if (process) { console.log('hit right paddle') }
         this.x_speed = -this.speed
         this.y_speed += (paddleRigth.y_speed / 2)
         this.x += this.x_speed

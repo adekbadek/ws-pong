@@ -63,6 +63,7 @@ io.on('connection', function (socket) {
   socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, id: socket.id, voters, score})
 
   io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
+
   socket.on('disconnect', function () {
     thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
     io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
