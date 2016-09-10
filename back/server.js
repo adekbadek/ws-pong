@@ -30,15 +30,11 @@ let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}
 
-let initialPaddleSpeed = 24
-let paddleSpeed = initialPaddleSpeed
+const initialPaddleSpeed = 12
+const getPaddleSpeed = () => {
+  return initialPaddleSpeed / (io.engine.clientsCount === 1 ? 1 : (io.engine.clientsCount / 2))
+}
 
-const updatePaddleSpeed = () => {
-  let newPaddleSpeed = 6 / (io.engine.clientsCount / 2)
-  if (newPaddleSpeed !== paddleSpeed && newPaddleSpeed <= initialPaddleSpeed) {
-    paddleSpeed = newPaddleSpeed
-    console.log(`updated paddleSpeed to ${paddleSpeed}`)
-  }
 }
 
 // define events for any new connection
@@ -46,11 +42,9 @@ io.on('connection', function (socket) {
   // io.emit will emit event to everyone
   // socket.emit will emit event just to specific connection
 
-  updatePaddleSpeed()
-
   // handle voting on direction
   socket.on('key-send', function (data) {
-    playersPos = utils.updatePlayersPosition(playersPos, paddleSpeed, data)
+    playersPos = utils.updatePlayersPosition(playersPos, getPaddleSpeed(), data)
 
     // update server game's paddles
     serverGame.rightPaddle.move(playersPos.playerRight, playersPos.playerRightSpeed)
@@ -74,8 +68,6 @@ io.on('connection', function (socket) {
   socket.on('disconnect', function () {
     thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
     io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
-
-    updatePaddleSpeed()
   })
 
   nextConnectedIsLeft = !nextConnectedIsLeft
