@@ -20,10 +20,7 @@ app.get('/', function (req, res) {
   res.render('index')
 })
 
-// primordial initial pos / the state
-
-// TODO: SSOT - use same in game module, or import configs from game module
-
+// globals
 let nextConnectedIsLeft = true
 let playersPos = {playerLeft: process.env.PLAYER_INIT_Y, playerLeftSpeed: 0, playerRight: process.env.PLAYER_INIT_Y, playerRightSpeed: 0}
 let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0}
@@ -35,6 +32,12 @@ const getPaddleSpeed = () => {
   return initialPaddleSpeed / (io.engine.clientsCount === 1 ? 1 : (io.engine.clientsCount / 2))
 }
 
+serverGame.ball.updateCallback = (ballPos) => {
+  io.emit('ball-pos', {ballPos})
+}
+serverGame.ball.scoreCallback = (x) => {
+  score = utils.updateScore(score, (x < 0 ? 'pRight' : 'pLeft'))
+  io.emit('score', {voters, score})
 }
 
 // define events for any new connection
@@ -54,15 +57,10 @@ io.on('connection', function (socket) {
     io.emit('update-players-positions', playersPos)
   })
 
-  // every second, broadcast official ballPos
-  setInterval(() => {
-    io.emit('set-ball-pos', {ballPos})
-  }, 1000)
-
   // for this new connection, assign paddle (side)
   const thisConnectedIsLeft = nextConnectedIsLeft
   thisConnectedIsLeft ? voters.pLeft += 1 : voters.pRight += 1
-  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, score, id: socket.id, voters})
+  socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, id: socket.id, voters, score})
 
   io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
   socket.on('disconnect', function () {

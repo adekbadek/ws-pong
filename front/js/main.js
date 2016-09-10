@@ -30,8 +30,7 @@ var isPlayerLeftGlobal
 const io = require('socket.io-client')
 var socket = io()
 
-// every second, server will update the position so all connections are on the same page
-socket.on('set-ball-pos', function (data) {
+socket.on('ball-pos', function (data) {
   ballGlobal.forceUpdate(data.ballPos)
 })
 

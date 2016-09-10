@@ -15,17 +15,7 @@ export const rightPaddle = new Paddle(
 
 export const ball = new Ball(
   {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0},
-  {width: process.env.CANVAS_WIDTH, height: process.env.CANVAS_HEIGHT}, // canvas
-  (ball) => { // update callback
-    // TODO: emit ball pos update here
-    // io.emit('ball-pos', {ballPos: { }})
-  },
-  (x) => {
-    // TODO: emit score
-    // let playerSide = (x < 0 ? 'pRight' : 'pLeft')
-    // score = utils.updateScore(score, playerSide) // what is the score
-    // io.emit('score', score)
-  }
+  {width: process.env.CANVAS_WIDTH, height: process.env.CANVAS_HEIGHT} // canvas
 )
 
 // this starts the frame loop
