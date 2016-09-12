@@ -25,12 +25,12 @@ export default class Ball {
     this.y_speed = ballPos.y_speed
   }
 
-  update (paddleLeft, paddleRigth) {
+  update (paddleLeft, paddleRight) {
     this.x += this.x_speed
     this.y += this.y_speed
     var ballTop = this.y - this.radius
     var ballBottom = this.y + this.radius
-    var balLeft = this.x - this.radius
+    var ballLeft = this.x - this.radius
     var ballRight = this.x + this.radius
 
     if (this.y - this.radius < 0) { // hitting the top wall
@@ -51,7 +51,11 @@ export default class Ball {
 
     if (this.x < this.canvas.width / 2) {
       // the ball is on the left
-      if (balLeft < (paddleLeft.x + paddleLeft.width) && ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius * 2 && ballTop > paddleLeft.y - this.radius * 2) {
+      if (
+        ballLeft < (paddleLeft.x + paddleLeft.width) &&
+        ballBottom < (paddleLeft.y + paddleLeft.height) + this.radius * 2 &&
+        ballTop > paddleLeft.y - this.radius * 2
+      ) {
         // hit the playerLeft's paddle
         this.x_speed = this.speed
         this.y_speed += (paddleLeft.y_speed / 2)
@@ -59,10 +63,14 @@ export default class Ball {
       }
     } else {
       // the ball is on the right
-      if (ballBottom < (paddleRigth.y + paddleRigth.height) + this.radius * 2 && ballTop > paddleRigth.y - this.radius * 2 && ballRight > paddleRigth.x) {
+      if (
+        ballRight > paddleRight.x &&
+        ballBottom < (paddleRight.y + paddleRight.height) + this.radius * 2 &&
+        ballTop > paddleRight.y - this.radius * 2
+      ) {
         // hit the playerRight's paddle
         this.x_speed = -this.speed
-        this.y_speed += (paddleRigth.y_speed / 2)
+        this.y_speed += (paddleRight.y_speed / 2)
         this.x += this.x_speed
       }
     }
