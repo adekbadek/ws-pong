@@ -24,8 +24,8 @@ app.get('/', function (req, res) {
 let nextConnectedIsLeft = true
 let playersPos = {playerLeft: parseInt(process.env.PLAYER_INIT_Y), playerLeftSpeed: 0, playerRight: parseInt(process.env.PLAYER_INIT_Y), playerRightSpeed: 0}
 let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0}
-let score = {pLeft: 0, pRight: 0}
-let voters = {pLeft: 0, pRight: 0}
+let score = {left: 0, right: 0}
+let voters = {left: 0, right: 0}
 
 const initialPaddleSpeed = 12
 const getPaddleSpeed = () => {
@@ -36,7 +36,7 @@ serverGame.ball.updateCallback = (ballPos) => {
   io.emit('ball-pos', {ballPos})
 }
 serverGame.ball.scoreCallback = (x) => {
-  score = utils.updateScore(score, (x < 0 ? 'pRight' : 'pLeft'))
+  score = utils.updateScore(score, (x < 0 ? 'right' : 'left'))
   io.emit('score', {voters, score})
 }
 
@@ -59,13 +59,13 @@ io.on('connection', function (socket) {
 
   // for this new connection, assign paddle (side)
   const thisConnectedIsLeft = nextConnectedIsLeft
-  thisConnectedIsLeft ? voters.pLeft += 1 : voters.pRight += 1
+  thisConnectedIsLeft ? voters.left += 1 : voters.right += 1
   socket.emit('init-game', {playersPos, ballPos, thisConnectedIsLeft, id: socket.id, voters, score})
 
   io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
 
   socket.on('disconnect', function () {
-    thisConnectedIsLeft ? voters.pLeft -= 1 : voters.pRight -= 1
+    thisConnectedIsLeft ? voters.left -= 1 : voters.right -= 1
     io.emit('connections', {clientsCount: io.engine.clientsCount, voters, score})
   })
 

@@ -45,8 +45,8 @@ socket.on('score', function (data) {
 
 socket.on('connections', function (data) {
   updateState(data)
-  introNum.innerHTML = ' ' + (data.voters[isPlayerLeftGlobal ? 'pLeft' : 'pRight'] - 1)
-  introNumOther.innerHTML = ' ' + data.voters[isPlayerLeftGlobal ? 'pRight' : 'pLeft']
+  introNum.innerHTML = ' ' + (data.voters[isPlayerLeftGlobal ? 'left' : 'right'] - 1)
+  introNumOther.innerHTML = ' ' + data.voters[isPlayerLeftGlobal ? 'right' : 'left']
 })
 
 socket.on('init-game', function (data) {

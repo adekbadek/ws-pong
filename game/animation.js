@@ -23,13 +23,13 @@ export const step = function (canvas, gameElements, store) {
   canvas.context.fillText('voters', canvas.width / 2 - canvas.context.measureText('voters').width / 2, canvas.height - 10)
   canvas.context.font = '20px sans-serif'
   // scores
-  canvas.context.fillText(scores.pLeft, canvas.width / 2 - canvas.context.measureText(scores.pLeft).width - 4, 40)
+  canvas.context.fillText(scores.left, canvas.width / 2 - canvas.context.measureText(scores.left).width - 4, 40)
   canvas.context.fillText('-', canvas.width / 2 - 2, 40)
-  canvas.context.fillText(scores.pRight, canvas.width / 2 + 6, 40)
+  canvas.context.fillText(scores.right, canvas.width / 2 + 6, 40)
   // voters
-  canvas.context.fillText(voters.pLeft, canvas.width / 2 - canvas.context.measureText(voters.pLeft).width - 4, canvas.height - 30)
+  canvas.context.fillText(voters.left, canvas.width / 2 - canvas.context.measureText(voters.left).width - 4, canvas.height - 30)
   canvas.context.fillText(':', canvas.width / 2 - 2, canvas.height - 30)
-  canvas.context.fillText(voters.pRight, canvas.width / 2 + 6, canvas.height - 30)
+  canvas.context.fillText(voters.right, canvas.width / 2 + 6, canvas.height - 30)
   gameElements.playerLeftGlobal.render()
   gameElements.playerRightGlobal.render()
   gameElements.ballGlobal.render()
