@@ -14,6 +14,7 @@
   },
   "globals": {
     "__CANVAS_WIDTH__": true,
-    "__CANVAS_HEIGHT__": true
+    "__CANVAS_HEIGHT__": true,
+    "__INIT_PADDLE_SPEED__": true
   }
 }

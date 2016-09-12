@@ -30,7 +30,8 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       __CANVAS_WIDTH__: process.env.CANVAS_WIDTH,
-      __CANVAS_HEIGHT__: process.env.CANVAS_HEIGHT
+      __CANVAS_HEIGHT__: process.env.CANVAS_HEIGHT,
+      __INIT_PADDLE_SPEED__: process.env.INIT_PADDLE_SPEED
     })
   ]
 }
