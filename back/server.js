@@ -23,7 +23,7 @@ app.get('/', function (req, res) {
 // globals
 let nextConnectedIsLeft = true
 let playersPos = {playerLeft: parseInt(process.env.PLAYER_INIT_Y), playerLeftSpeed: 0, playerRight: parseInt(process.env.PLAYER_INIT_Y), playerRightSpeed: 0}
-let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0}
+let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 5, y_speed: 0}
 let score = {left: 0, right: 0}
 let voters = {left: 0, right: 0}
 
@@ -42,8 +42,8 @@ serverGame.ball.scoreCallback = (x) => {
 }
 
 class AIPlayer {
-  constructor () {
-    this.side = Math.random() > 0.5 ? 'left' : 'right'
+  constructor (side) {
+    this.side = side || (Math.random() > 0.5 ? 'left' : 'right')
     this.paddle = serverGame[this.side + 'Paddle']
     this.intervalTime = 1000
   }
@@ -56,7 +56,7 @@ class AIPlayer {
       } else if (this.paddle.y + 40 > serverGame.ball.y) {
         direction = 'up'
       } else {
-        direction = Math.random() > 0.5 ? 'down' : 'up'
+        direction = 'none'
       }
       playersPos = utils.updatePlayersPosition(playersPos, getPaddleSpeed(), `${this.side}-${direction}`)
       serverGame.updatePaddlePositions(playersPos)
@@ -66,7 +66,7 @@ class AIPlayer {
 
       let haste = this.side === 'left' ? serverGame.ball.x_speed < 0 : serverGame.ball.x_speed > 0
 
-      this.intervalTime = Math.floor(Math.random() * 1000 + 500) / (serverGame.ball.y_speed === 0 ? 1 : Math.abs(serverGame.ball.y_speed)) / (haste ? 10 : 1)
+      this.intervalTime = Math.floor(Math.random() * 1000 + 1500) / (serverGame.ball.y_speed === 0 ? 1 : Math.abs(serverGame.ball.y_speed)) / (haste ? 5 : 1)
       this.interval()
     }, this.intervalTime)
   }
@@ -77,8 +77,8 @@ class AIPlayer {
   }
 }
 
-for (var i = 0; i < 20; i++) {
-  const newAIPlayer = new AIPlayer()
+for (var i = 0; i < 3; i++) {
+  const newAIPlayer = new AIPlayer(i % 2 > 0 ? 'left' : 'right')
   newAIPlayer.start()
 }
 
