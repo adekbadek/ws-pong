@@ -1,5 +1,7 @@
 var fs = require('fs')
 
+const devConfig = require('./webpack.config.dev.js')
+
 // http://jlongster.com/Backend-Apps-with-Webpack--Part-I
 var nodeModules = {}
 fs.readdirSync('node_modules')
@@ -34,5 +36,6 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  plugins: devConfig.plugins
 }

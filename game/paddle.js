@@ -8,7 +8,7 @@ export default class Paddle {
     this.height = 80
     this.x_speed = 0
     this.y_speed = 0
-    this.maxY = process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__
+    this.maxY = __CANVAS_HEIGHT__
     if (imgSrc) {
       var img = document.createElement('img')
       img.src = imgSrc

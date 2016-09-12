@@ -5,7 +5,7 @@ export const updatePlayersPosition = (playersPos, paddleSpeed, sideAndDirection)
       playersPos.playerRightSpeed = -paddleSpeed
     }
   } else if (sideAndDirection === 'right-down') {
-    if (playersPos.playerRight + 80 <= (process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__)) {
+    if (playersPos.playerRight + 80 <= __CANVAS_HEIGHT__) {
       playersPos.playerRight += paddleSpeed
       playersPos.playerRightSpeed = paddleSpeed
     }
@@ -15,7 +15,7 @@ export const updatePlayersPosition = (playersPos, paddleSpeed, sideAndDirection)
       playersPos.playerLeftSpeed = -paddleSpeed
     }
   } else if (sideAndDirection === 'left-down') {
-    if (playersPos.playerLeft + 80 <= (process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__)) {
+    if (playersPos.playerLeft + 80 <= __CANVAS_HEIGHT__) {
       playersPos.playerLeft += paddleSpeed
       playersPos.playerLeftSpeed = paddleSpeed
     }
