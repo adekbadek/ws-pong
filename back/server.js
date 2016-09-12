@@ -29,7 +29,8 @@ let voters = {left: 0, right: 0}
 
 const initialPaddleSpeed = 12
 const getPaddleSpeed = () => {
-  return initialPaddleSpeed / (io.engine.clientsCount === 1 ? 1 : (io.engine.clientsCount / 2))
+  const allVoters = voters.left + voters.right
+  return initialPaddleSpeed / (allVoters === 1 ? 1 : (allVoters / 2))
 }
 
 serverGame.ball.updateCallback = (ballPos) => {
@@ -38,6 +39,49 @@ serverGame.ball.updateCallback = (ballPos) => {
 serverGame.ball.scoreCallback = (x) => {
   score = utils.updateScore(score, (x < 0 ? 'right' : 'left'))
   io.emit('score', {voters, score})
+}
+
+class AIPlayer {
+  constructor () {
+    this.side = Math.random() > 0.5 ? 'left' : 'right'
+    this.paddle = serverGame[this.side + 'Paddle']
+    this.intervalTime = 1000
+    console.log('AIPlayer instantiated', this.side)
+  }
+
+  interval () {
+    setTimeout(() => {
+      let direction
+      if (this.paddle.y + 40 < serverGame.ball.y) {
+        direction = 'down'
+      } else if (this.paddle.y + 40 > serverGame.ball.y) {
+        direction = 'up'
+      } else {
+        direction = Math.random() > 0.5 ? 'down' : 'up'
+      }
+      playersPos = utils.updatePlayersPosition(playersPos, getPaddleSpeed(), `${this.side}-${direction}`)
+      serverGame.updatePaddlePositions(playersPos)
+
+      // console.log('move by AI player', this.side, serverGame.leftPaddle.y, serverGame.rightPaddle.y)
+      io.emit('update-players-positions', playersPos)
+
+      let haste = this.side === 'left' ? serverGame.ball.x_speed < 0 : serverGame.ball.x_speed > 0
+
+      this.intervalTime = Math.floor(Math.random() * 1000 + 500) / (serverGame.ball.y_speed === 0 ? 1 : Math.abs(serverGame.ball.y_speed)) / (haste ? 10 : 0.5)
+      // console.log(this.intervalTime)
+      this.interval()
+    }, this.intervalTime)
+  }
+
+  start () {
+    voters[this.side] += 1
+    this.interval()
+  }
+}
+
+for (var i = 0; i < 20; i++) {
+  const newAIPlayer = new AIPlayer()
+  newAIPlayer.start()
 }
 
 // define events for any new connection
@@ -50,8 +94,7 @@ io.on('connection', function (socket) {
     playersPos = utils.updatePlayersPosition(playersPos, getPaddleSpeed(), data)
 
     // update server game's paddles
-    serverGame.rightPaddle.move(playersPos.playerRight, playersPos.playerRightSpeed)
-    serverGame.leftPaddle.move(playersPos.playerLeft, playersPos.playerLeftSpeed)
+    serverGame.updatePaddlePositions(playersPos)
 
     // update client's paddles
     io.emit('update-players-positions', playersPos)

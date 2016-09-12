@@ -18,6 +18,11 @@ export const ball = new Ball(
   {width: process.env.CANVAS_WIDTH, height: process.env.CANVAS_HEIGHT} // canvas
 )
 
+export const updatePaddlePositions = (playersPos) => {
+  leftPaddle.move(playersPos.playerLeft, playersPos.playerLeftSpeed)
+  rightPaddle.move(playersPos.playerRight, playersPos.playerRightSpeed)
+}
+
 // this starts the frame loop
 let step = () => {
   // every frame
