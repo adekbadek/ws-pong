@@ -77,10 +77,10 @@ class AIPlayer {
   }
 }
 
-for (var i = 0; i < 3; i++) {
-  const newAIPlayer = new AIPlayer(i % 2 > 0 ? 'left' : 'right')
-  newAIPlayer.start()
-}
+// for (var i = 0; i < 3; i++) {
+//   const newAIPlayer = new AIPlayer(i % 2 > 0 ? 'left' : 'right')
+//   newAIPlayer.start()
+// }
 
 // define events for any new connection
 io.on('connection', function (socket) {
