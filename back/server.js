@@ -22,7 +22,7 @@ app.get('/', function (req, res) {
 
 // globals
 let nextConnectedIsLeft = true
-let playersPos = {playerLeft: process.env.PLAYER_INIT_Y, playerLeftSpeed: 0, playerRight: process.env.PLAYER_INIT_Y, playerRightSpeed: 0}
+let playersPos = {playerLeft: parseInt(process.env.PLAYER_INIT_Y), playerLeftSpeed: 0, playerRight: parseInt(process.env.PLAYER_INIT_Y), playerRightSpeed: 0}
 let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 3, y_speed: 0}
 let score = {pLeft: 0, pRight: 0}
 let voters = {pLeft: 0, pRight: 0}

@@ -6,11 +6,11 @@ import {animate} from '../game/animation'
 
 export const leftPaddle = new Paddle(
   20,
-  process.env.PLAYER_INIT_Y
+  parseInt(process.env.PLAYER_INIT_Y)
 )
 export const rightPaddle = new Paddle(
   process.env.CANVAS_WIDTH - 40,
-  process.env.PLAYER_INIT_Y
+  parseInt(process.env.PLAYER_INIT_Y)
 )
 
 export const ball = new Ball(

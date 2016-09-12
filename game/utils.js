@@ -1,23 +1,23 @@
 export const updatePlayersPosition = (playersPos, paddleSpeed, sideAndDirection) => {
   if (sideAndDirection === 'right-up') {
     if (playersPos.playerRight >= 0) {
-      playersPos.playerRight -= (+paddleSpeed)
-      playersPos.playerRightSpeed = -(+paddleSpeed)
+      playersPos.playerRight -= paddleSpeed
+      playersPos.playerRightSpeed = -paddleSpeed
     }
   } else if (sideAndDirection === 'right-down') {
     if (playersPos.playerRight + 80 <= (process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__)) {
-      playersPos.playerRight += (+paddleSpeed)
-      playersPos.playerRightSpeed = (+paddleSpeed)
+      playersPos.playerRight += paddleSpeed
+      playersPos.playerRightSpeed = paddleSpeed
     }
   } else if (sideAndDirection === 'left-up') {
     if (playersPos.playerLeft >= 0) {
-      playersPos.playerLeft -= (+paddleSpeed)
-      playersPos.playerLeftSpeed = -(+paddleSpeed)
+      playersPos.playerLeft -= paddleSpeed
+      playersPos.playerLeftSpeed = -paddleSpeed
     }
   } else if (sideAndDirection === 'left-down') {
     if (playersPos.playerLeft + 80 <= (process ? process.env.CANVAS_HEIGHT : __CANVAS_HEIGHT__)) {
-      playersPos.playerLeft += (+paddleSpeed)
-      playersPos.playerLeftSpeed = (+paddleSpeed)
+      playersPos.playerLeft += paddleSpeed
+      playersPos.playerLeftSpeed = paddleSpeed
     }
   }
   return playersPos
