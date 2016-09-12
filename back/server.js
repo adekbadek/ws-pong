@@ -46,7 +46,6 @@ class AIPlayer {
     this.side = Math.random() > 0.5 ? 'left' : 'right'
     this.paddle = serverGame[this.side + 'Paddle']
     this.intervalTime = 1000
-    console.log('AIPlayer instantiated', this.side)
   }
 
   interval () {
@@ -67,8 +66,7 @@ class AIPlayer {
 
       let haste = this.side === 'left' ? serverGame.ball.x_speed < 0 : serverGame.ball.x_speed > 0
 
-      this.intervalTime = Math.floor(Math.random() * 1000 + 500) / (serverGame.ball.y_speed === 0 ? 1 : Math.abs(serverGame.ball.y_speed)) / (haste ? 10 : 0.5)
-      // console.log(this.intervalTime)
+      this.intervalTime = Math.floor(Math.random() * 1000 + 500) / (serverGame.ball.y_speed === 0 ? 1 : Math.abs(serverGame.ball.y_speed)) / (haste ? 10 : 1)
       this.interval()
     }, this.intervalTime)
   }
