@@ -15,6 +15,8 @@ export const step = function (canvas, gameElements, store) {
   let scores = store.getState().score
   let voters = store.getState().voters
 
+  gameElements.ballGlobal.update(gameElements.playerLeftGlobal, gameElements.playerRightGlobal)
+
   canvas.context.fillStyle = '#00f'
   canvas.context.fillRect(0, 0, canvas.width, canvas.height)
   canvas.context.font = '16px sans-serif'

@@ -27,9 +27,11 @@ let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2
 let score = {left: 0, right: 0}
 let voters = {left: 0, right: 0}
 
-serverGame.ball.updateCallback = (ballPos) => {
-  io.emit('ball-pos', {ballPos})
+serverGame.ball.updateCallback = (updatedBallPos) => {
+  ballPos = updatedBallPos
 }
+setInterval(() => { io.emit('ball-pos', {ballPos}) }, 100)
+
 serverGame.ball.scoreCallback = (x) => {
   score = utils.updateScore(score, (x < 0 ? 'right' : 'left'))
   io.emit('score', {voters, score})
