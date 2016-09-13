@@ -35,16 +35,19 @@ serverGame.ball.scoreCallback = (x) => {
   io.emit('score', {voters, score})
 }
 
+// AI - run with 'ai' arg
 import AIPlayer from './ai'
-for (var i = 0; i < 3; i++) {
-  const newAIPlayer = new AIPlayer(
-    i % 2 > 0 ? 'left' : 'right',
-    serverGame,
-    playersPos,
-    voters,
-    () => { io.emit('update-players-positions', playersPos) }
-  )
-  newAIPlayer.start()
+if (process.argv.indexOf('ai') > 0) {
+  for (var i = 0; i < 3; i++) {
+    const newAIPlayer = new AIPlayer(
+      i % 2 > 0 ? 'left' : 'right',
+      serverGame,
+      playersPos,
+      voters,
+      () => { io.emit('update-players-positions', playersPos) }
+    )
+    newAIPlayer.start()
+  }
 }
 
 // define events for any new connection
