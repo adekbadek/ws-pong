@@ -23,14 +23,22 @@ app.get('/', function (req, res) {
 // globals
 let nextConnectedIsLeft = true
 let playersPos = {playerLeft: parseInt(process.env.PLAYER_INIT_Y), playerLeftSpeed: 0, playerRight: parseInt(process.env.PLAYER_INIT_Y), playerRightSpeed: 0}
-let ballPos = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 5, y_speed: 0}
+const INITAL_BALL_POS = {x: process.env.CANVAS_WIDTH / 2, y: process.env.CANVAS_HEIGHT / 2, x_speed: 5, y_speed: 0}
+let ballPos = INITAL_BALL_POS
 let score = {left: 0, right: 0}
 let voters = {left: 0, right: 0}
 
 serverGame.ball.updateCallback = (updatedBallPos) => {
   ballPos = updatedBallPos
 }
-setInterval(() => { io.emit('ball-pos', {ballPos}) }, 100)
+setInterval(() => {
+  if (Math.abs(ballPos.y_speed) > 20) {
+    // fail-safe for infinite ball problem
+    ballPos = INITAL_BALL_POS
+    serverGame.ball.forceUpdate(ballPos)
+  }
+  io.emit('ball-pos', {ballPos})
+}, 100)
 
 serverGame.ball.scoreCallback = (x) => {
   score = utils.updateScore(score, (x < 0 ? 'right' : 'left'))
@@ -40,7 +48,7 @@ serverGame.ball.scoreCallback = (x) => {
 // AI - run with 'ai' arg
 import AIPlayer from './ai'
 if (process.argv.indexOf('ai') > 0) {
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 5; i++) {
     const newAIPlayer = new AIPlayer(
       i % 2 > 0 ? 'left' : 'right',
       serverGame,
