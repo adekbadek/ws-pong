@@ -10,7 +10,8 @@
     "webpack:server": "env-cmd ./.env webpack --config webpack.config.server.js",
     "watch": "env-cmd ./.env npm-watch",
     "build": "npm run webpack:prod && npm run webpack:server",
-    "build:dev": "npm run webpack:dev && npm run webpack:server"
+    "build:dev": "npm run webpack:dev && npm run webpack:server",
+    "deploy": "rsync -avz -e 'ssh' --exclude-from '.rsync-exclude' . ostia:/home/ostia/misc/pong"
   },
   "watch": {
     "webpack:dev": [
