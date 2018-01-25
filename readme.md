@@ -1,3 +1,3 @@
 # pong with everyone
 
-currently at: [pong.mod.bz](https://pong.mod.bz/)
+currently at: [pong.adamboro.com](https://pong.adamboro.com/)
