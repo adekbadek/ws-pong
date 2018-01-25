@@ -31,7 +31,8 @@ module.exports = {
     new webpack.DefinePlugin({
       __CANVAS_WIDTH__: process.env.CANVAS_WIDTH,
       __CANVAS_HEIGHT__: process.env.CANVAS_HEIGHT,
-      __INIT_PADDLE_SPEED__: process.env.INIT_PADDLE_SPEED
+      __INIT_PADDLE_SPEED__: process.env.INIT_PADDLE_SPEED,
+      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
     })
   ]
 }
